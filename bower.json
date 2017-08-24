@@ -1,0 +1,13 @@
+{
+  "author": "Ludovic Cluber",
+  "name": "kraitjs",
+  "license": "MIT",
+  "main": [
+    "dist/krait.js"
+  ],
+  "description": "Key bindings library written in Javascript.",
+  "version": "0.1.0",
+  "dependencies": {
+  
+  }
+}

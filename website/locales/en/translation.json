@@ -1,0 +1,41 @@
+{
+  "title": "Krait.js",
+  "menu" : { 
+    "menu"          : "Menu",
+    "home"          : "Home",
+    "about"         : "About",
+    "example"       : "Example",
+    "code"          : "Code",
+    "download"      : "Download",
+    "documentation" : "Documentation",
+    "contact"       : "Contact"
+  },
+  "section" : {
+    "home" : {
+      "h1" : "Krait.js",
+      "description" : "An open source key bindings library written in Javascript."
+    },
+    "about" : {
+      "h2" : "About",
+      "text" : "<p>The purpose of this library is to provide a simple and easy to use key binding declaration.</p><p>Check <a href=\"#example\" class=\"page-scroll\">Example</a> and <a href=\"#source\" class=\"page-scroll\">Code</a> section for more information on how to use Krait.js.<br/>There is also a <a href=\"doc/index.html\" target=\"_blank\" class=\"page-scroll\">documentation</a> if you need to go deeper.</p><p> You can help develop Krait.js on <a href=\"https://github.com/LCluber/Krait.js\" target=\"_blank\">Github</a>.</p>"
+    },
+    "code" : {
+      "h2" : "Code",
+      "h3" : "Javascript (main.js)",
+      "p1" : "Instantiate a Keyboard class and creates input listeners."
+    },
+    "download" : {
+      "h2" : "Download Krait.js",
+      "min" : "Krait.min.js",
+      "zip" : "Kraitjs.zip",
+      "github" : "Clone from Github"
+    },
+    "contact" : {
+      "h2" : "Contact me",
+      "description" : "Feel free to ask me about my work, give me suggestions, or just to say hi.",
+      "website" : "lcluber.com"
+    }
+  },
+  "github":"Github",
+  "twitter":"Twitter"
+}

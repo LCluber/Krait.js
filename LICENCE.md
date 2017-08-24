@@ -1,34 +1,3 @@
-## Synopsis
-
-Krait.js is a key bindings library written in Javascript.
-
-## Code Example
-
- [See a basic example on the dedicated website](http://kraitjs.lcluber.com/#source).
-
-## Motivation
-
-The purpose of this library is to provide a simple and easy to use key binding declaration.
-
-## Installation
-
-To use **Krait.js** download it **[here](http://kraitjs.lcluber.com/#download)** and learn how to use it **[there](http://kraitjs.lcluber.com/#example)**.
-
-## API Reference
-
-[See the documentation on the dedicated website](http://kraitjs.lcluber.com/doc/).
-
-## Tests
-
-No tests to run yet
-
-## Contributors
-
-There is still a lot of work to do on this project and I would be glad to get all the help you can provide.
-To contribute you can clone the project on **[GitHub](https://github.com/LCluber/Krait.js)** and see  **INSTALL.md** for detailed installation walkthrough of the project.
-
-## License
-
 MIT License
 
 Copyright (c) 2015 Ludovic CLUBER
