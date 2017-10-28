@@ -70,8 +70,19 @@
         up: function(a) {
             if (this[a.which] !== undefined) this[a.which].Up();
         },
-        addInput: function(name, ascii, callback, scope) {
-            this[ascii] = new Input(name, ascii, callback, scope);
+        addInput: function(name, character, callback, scope) {
+            var ascii = character;
+            if (character !== parseInt(character, 10)) {
+                ascii = character.charCodeAt(0);
+            }
+            if (this.isASCII(ascii, true)) {
+                this[ascii] = new Input(name, ascii, callback, scope);
+                return ascii;
+            }
+            return null;
+        },
+        isASCII: function(str, extended) {
+            return (extended ? /^[\x00-\xFF]*$/ : /^[\x00-\x7F]*$/).test(str);
         }
     });
     exports.Keyboard = Keyboard;

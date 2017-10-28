@@ -6,7 +6,7 @@
     "dist/krait.js"
   ],
   "description": "Key bindings library written in Javascript.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "dependencies": {
   
   }
