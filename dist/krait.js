@@ -24,38 +24,34 @@
 */
 
 (function(global, factory) {
-    typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define([ "exports" ], factory) : factory(global.KRAIT = global.KRAIT || {});
+    typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define([ "exports" ], factory) : factory(global.KRAIT = {});
 })(this, function(exports) {
     "use strict";
-    function Input(name, ascii, callback, scope) {
-        this.name = name;
-        this.ascii = ascii;
-        this.defau = ascii;
-        this.callback = callback;
-        if (scope) {
-            this.setScope(scope);
+    var Input = function() {
+        function Input(ascii, callback, scope) {
+            this.defaultASCII = ascii;
+            this.callback = callback;
+            if (scope) {
+                this.callback = this.callback.bind(scope);
+            }
         }
-    }
-    Object.assign(Input.prototype, {
-        set: function(v) {
-            this.ascii = parseInt(v);
-        },
-        setScope: function(scope) {
-            this.callback = this.callback.bind(scope);
-        },
-        Down: function(a) {
+        Input.prototype.setDefaultASCII = function(ascii) {
+            this.defaultASCII = ascii;
+        };
+        Input.prototype.Down = function(a) {
             a.preventDefault();
             this.callback(true);
-        },
-        Up: function() {
+        };
+        Input.prototype.Up = function() {
             this.callback(false);
+        };
+        return Input;
+    }();
+    var Keyboard = function() {
+        function Keyboard() {
+            this.initListeners();
         }
-    });
-    function Keyboard() {
-        this.initListeners();
-    }
-    Object.assign(Keyboard.prototype, {
-        initListeners: function() {
+        Keyboard.prototype.initListeners = function() {
             var _this = this;
             document.onkeydown = function(a) {
                 _this.down(a);
@@ -63,28 +59,68 @@
             document.onkeyup = function(a) {
                 _this.up(a);
             };
-        },
-        down: function(a) {
-            if (this[a.which] !== undefined) this[a.which].Down(a);
-        },
-        up: function(a) {
-            if (this[a.which] !== undefined) this[a.which].Up();
-        },
-        addInput: function(name, character, callback, scope) {
-            var ascii = character;
-            if (character !== parseInt(character, 10)) {
-                ascii = character.charCodeAt(0);
+        };
+        Keyboard.prototype.down = function(a) {
+            if (this[a.which] !== undefined) {
+                this[a.which].Down(a);
             }
-            if (this.isASCII(ascii, true)) {
-                this[ascii] = new Input(name, ascii, callback, scope);
+        };
+        Keyboard.prototype.up = function(a) {
+            if (this[a.which] !== undefined) {
+                this[a.which].Up();
+            }
+        };
+        Keyboard.prototype.addInput = function(character, callback, scope) {
+            var ascii = this.inputValidation(character);
+            if (ascii) {
+                this[ascii] = new Input(ascii, callback, scope);
+                this.log = "Added new input with ASCII code " + character;
                 return ascii;
             }
-            return null;
-        },
-        isASCII: function(str, extended) {
-            return (extended ? /^[\x00-\xFF]*$/ : /^[\x00-\x7F]*$/).test(str);
-        }
-    });
+            return false;
+        };
+        Keyboard.prototype.setInput = function(oldCharacter, newCharacter) {
+            var oldASCII = this.inputValidation(oldCharacter);
+            if (oldASCII) {
+                if (this.hasOwnProperty(oldASCII + "")) {
+                    var newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
+                    if (newASCII) {
+                        this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
+                        delete this[oldASCII];
+                        this.log = oldASCII + " is now set to " + newASCII;
+                        return true;
+                    }
+                    return false;
+                }
+                this.log = oldASCII + " input not found";
+                return false;
+            }
+            return false;
+        };
+        Keyboard.prototype.getLastLog = function() {
+            return this.log;
+        };
+        Keyboard.prototype.inputValidation = function(ascii) {
+            if (!this.isInteger(ascii)) {
+                ascii = this.stringToASCII(ascii);
+            }
+            if (this.isASCII(ascii, true)) {
+                return ascii;
+            }
+            this.log = ascii + " is not assignable to a valid ASCII code";
+            return false;
+        };
+        Keyboard.prototype.stringToASCII = function(code) {
+            return code.charCodeAt(0);
+        };
+        Keyboard.prototype.isInteger = function(value) {
+            return value === parseInt(value, 10);
+        };
+        Keyboard.prototype.isASCII = function(code, extended) {
+            return (extended ? /^[\x00-\xFF]*$/ : /^[\x00-\x7F]*$/).test(code);
+        };
+        return Keyboard;
+    }();
     exports.Keyboard = Keyboard;
     Object.defineProperty(exports, "__esModule", {
         value: true

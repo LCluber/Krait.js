@@ -5,8 +5,8 @@
   "main": [
     "dist/krait.js"
   ],
-  "description": "Key bindings library written in Javascript.",
-  "version": "0.1.1",
+  "description": "Key bindings library written in TypeScript.",
+  "version": "0.2.0",
   "dependencies": {
   
   }

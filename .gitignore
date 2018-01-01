@@ -2,6 +2,7 @@
 node_modules/
 website/static/
 website/sass/build/
-website/js/build/
+src/ts/build/
 .sass-cache/
+.tscache/
 npm-debug.log

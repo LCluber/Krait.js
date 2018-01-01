@@ -13,7 +13,7 @@
   "section" : {
     "home" : {
       "h1" : "Krait.js",
-      "description" : "An open source key bindings library written in Javascript."
+      "description" : "An open source key bindings library written in TypeScript."
     },
     "about" : {
       "h2" : "About",
