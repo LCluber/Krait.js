@@ -1,6 +1,6 @@
 ## Synopsis
 
-Krait.js is a key bindings library written in Javascript.
+Krait.js is a key bindings library written in TypeScript.
 
 ## Code Example
 

@@ -11,7 +11,7 @@
   },
   "section" : {
     "home" : {
-      "description" : "An open source key bindings library written in Javascript."
+      "description" : "An open source key bindings library written in TypeScript."
     },
     "about" : {
       "h2" : "Présentation"

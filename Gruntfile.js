@@ -8,13 +8,14 @@ module.exports = function(grunt){
   var port      = 3008;
   var host      = 'localhost';
 
-  var srcDir    = 'src/';
-  var distDir   = 'dist/';
-  var webDir    = 'website/';
-  var publicDir = webDir + 'public/';
-  var nodeDir   = 'node_modules/';
-  var docDir    = 'doc/';
-  var zipDir    = 'zip/';
+  var srcDir          = 'src/';
+  var compiledSrcDir  = srcDir + 'ts/build/';
+  var distDir         = 'dist/';
+  var webDir          = 'website/';
+  var publicDir       = webDir + 'public/';
+  var nodeDir         = 'node_modules/';
+  var docDir          = 'doc/';
+  var zipDir          = 'zip/';
 
 
   var banner    = '/** MIT License\n' +
@@ -160,6 +161,30 @@ module.exports = function(grunt){
         dest: webDir + 'static/'
       }
     },
+    tslint: {
+      options: {
+        configuration: 'config/tslint.json',
+        force: false
+      },
+      lib: {
+        files: [{
+          expand: true,
+          cwd: srcDir, 
+          src: [ srcDir + '**/*.ts' ]
+        }]
+      }
+    },
+    ts: {
+      tsconfig: 'config/tsconfig.json',
+      lib : {
+        outDir: compiledSrcDir,
+        options: {
+          rootDir: srcDir + 'ts/',
+          declaration: false
+        },
+        src: [ srcDir + '**/*.ts', '!node_modules/**/*.ts' ]
+      }
+    },
     rollup: {
       options: {
         format:'umd',
@@ -167,7 +192,7 @@ module.exports = function(grunt){
       },
       bundle:{
         files: [ {
-          src : srcDir + projectNameLC + '.js', 
+          src : compiledSrcDir + projectNameLC + '.js', 
           dest : distDir + projectNameLC + '.js' 
         } ]
       }
@@ -346,7 +371,7 @@ module.exports = function(grunt){
     },
     watch: {
       lib: {
-        files: srcDir + '**/*.js',
+        files: srcDir + 'ts/**/*.ts',
         tasks: ['dist'],  
       },
       webpug:{
@@ -392,15 +417,18 @@ module.exports = function(grunt){
   grunt.loadNpmTasks( 'grunt-concurrent' );
   grunt.loadNpmTasks( 'grunt-nodemon' );
   grunt.loadNpmTasks( 'grunt-open' );
+  grunt.loadNpmTasks( 'grunt-tslint' );
+  grunt.loadNpmTasks( 'grunt-ts' );
   grunt.loadNpmTasks( 'grunt-rollup' );
 
   grunt.registerTask( 'lib',
                       'build the library in the dist/ folder',
-                      [ 'jshint:lib',
+                      [ 'tslint:lib',
                         'clean:lib',
+                        'ts:lib',
                         'rollup',
-                        'jsdoc',
                         'uglify:libmin', 'uglify:lib'
+                        //'jsdoc'
                       ]
                     );
 
