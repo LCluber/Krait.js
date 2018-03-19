@@ -1,4 +1,9 @@
 
+Version 0.2.1 (March 19th 2018)
+-----------------------------
+ * Added logs with Mouette.js
+ * Added TypeScript Declaration File
+
 Version 0.2.0 (January 1st 2018)
 -----------------------------
  * Added setInput() method to the Keyboard class.

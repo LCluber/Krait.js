@@ -23,11 +23,13 @@
 * http://kraitjs.lcluber.com
 */
 
-(function(global, factory) {
-    typeof exports === "object" && typeof module !== "undefined" ? factory(exports) : typeof define === "function" && define.amd ? define([ "exports" ], factory) : factory(global.KRAIT = {});
-})(this, function(exports) {
-    "use strict";
-    var Input = function() {
+(function (global, factory) {
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('../../bower_components/Mouettejs/dist/mouette.js')) :
+    typeof define === 'function' && define.amd ? define(['exports', '../../bower_components/Mouettejs/dist/mouette.js'], factory) :
+    (factory((global.KRAIT = {}),global.MOUETTE));
+}(this, (function (exports,MOUETTE) { 'use strict';
+
+    var Input = (function () {
         function Input(ascii, callback, scope) {
             this.defaultASCII = ascii;
             this.callback = callback;
@@ -35,94 +37,95 @@
                 this.callback = this.callback.bind(scope);
             }
         }
-        Input.prototype.setDefaultASCII = function(ascii) {
+        Input.prototype.setDefaultASCII = function (ascii) {
             this.defaultASCII = ascii;
         };
-        Input.prototype.Down = function(a) {
+        Input.prototype.Down = function (a) {
             a.preventDefault();
             this.callback(true);
         };
-        Input.prototype.Up = function() {
+        Input.prototype.Up = function () {
             this.callback(false);
         };
         return Input;
-    }();
-    var Keyboard = function() {
+    }());
+
+    var Keyboard = (function () {
         function Keyboard() {
             this.initListeners();
         }
-        Keyboard.prototype.initListeners = function() {
+        Keyboard.prototype.initListeners = function () {
             var _this = this;
-            document.onkeydown = function(a) {
+            document.onkeydown = function (a) {
                 _this.down(a);
             };
-            document.onkeyup = function(a) {
+            document.onkeyup = function (a) {
                 _this.up(a);
             };
         };
-        Keyboard.prototype.down = function(a) {
+        Keyboard.prototype.down = function (a) {
             if (this[a.which] !== undefined) {
                 this[a.which].Down(a);
+                MOUETTE.Logger.info('Key ' + a.which + ' pressed');
             }
         };
-        Keyboard.prototype.up = function(a) {
+        Keyboard.prototype.up = function (a) {
             if (this[a.which] !== undefined) {
                 this[a.which].Up();
+                MOUETTE.Logger.info('Key ' + a.which + ' released');
             }
         };
-        Keyboard.prototype.addInput = function(character, callback, scope) {
+        Keyboard.prototype.addInput = function (character, callback, scope) {
             var ascii = this.inputValidation(character);
             if (ascii) {
                 this[ascii] = new Input(ascii, callback, scope);
-                this.log = "Added new input with ASCII code " + character;
+                MOUETTE.Logger.info('Added new input with ASCII code ' + character);
                 return ascii;
             }
             return false;
         };
-        Keyboard.prototype.setInput = function(oldCharacter, newCharacter) {
+        Keyboard.prototype.setInput = function (oldCharacter, newCharacter) {
             var oldASCII = this.inputValidation(oldCharacter);
             if (oldASCII) {
-                if (this.hasOwnProperty(oldASCII + "")) {
+                if (this.hasOwnProperty(oldASCII + '')) {
                     var newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
                     if (newASCII) {
                         this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
                         delete this[oldASCII];
-                        this.log = oldASCII + " is now set to " + newASCII;
+                        MOUETTE.Logger.info(oldASCII + ' is now set to ' + newASCII);
                         return true;
                     }
                     return false;
                 }
-                this.log = oldASCII + " input not found";
+                MOUETTE.Logger.error(oldASCII + ' input not found');
                 return false;
             }
             return false;
         };
-        Keyboard.prototype.getLastLog = function() {
-            return this.log;
-        };
-        Keyboard.prototype.inputValidation = function(ascii) {
+        Keyboard.prototype.inputValidation = function (ascii) {
             if (!this.isInteger(ascii)) {
                 ascii = this.stringToASCII(ascii);
             }
             if (this.isASCII(ascii, true)) {
                 return ascii;
             }
-            this.log = ascii + " is not assignable to a valid ASCII code";
+            MOUETTE.Logger.error(ascii + ' is not assignable to a valid ASCII code');
             return false;
         };
-        Keyboard.prototype.stringToASCII = function(code) {
+        Keyboard.prototype.stringToASCII = function (code) {
             return code.charCodeAt(0);
         };
-        Keyboard.prototype.isInteger = function(value) {
-            return value === parseInt(value, 10);
+        Keyboard.prototype.isInteger = function (value) {
+            return (value === parseInt(value, 10));
         };
-        Keyboard.prototype.isASCII = function(code, extended) {
+        Keyboard.prototype.isASCII = function (code, extended) {
             return (extended ? /^[\x00-\xFF]*$/ : /^[\x00-\x7F]*$/).test(code);
         };
         return Keyboard;
-    }();
+    }());
+
     exports.Keyboard = Keyboard;
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-});
+
+    Object.defineProperty(exports, '__esModule', { value: true });
+
+})));

@@ -1,8 +1,11 @@
 
+bower_components/
 node_modules/
 website/static/
 website/sass/build/
-src/ts/build/
+website/js/build/
+src/build/
 .sass-cache/
 .tscache/
 npm-debug.log
+package-lock.json
