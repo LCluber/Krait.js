@@ -24,10 +24,10 @@
 */
 
 (function (global, factory) {
-    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('../../bower_components/Mouettejs/dist/mouette.js')) :
-    typeof define === 'function' && define.amd ? define(['exports', '../../bower_components/Mouettejs/dist/mouette.js'], factory) :
-    (factory((global.KRAIT = {}),global.MOUETTE));
-}(this, (function (exports,MOUETTE) { 'use strict';
+    typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports, require('../../bower_components/Weejs/dist/wee.js'), require('../../bower_components/Mouettejs/dist/mouette.js')) :
+    typeof define === 'function' && define.amd ? define(['exports', '../../bower_components/Weejs/dist/wee.js', '../../bower_components/Mouettejs/dist/mouette.js'], factory) :
+    (factory((global.KRAIT = {}),global.WEE,global.MOUETTE));
+}(this, (function (exports,WEE,MOUETTE) { 'use strict';
 
     var Input = (function () {
         function Input(ascii, callback, scope) {
@@ -103,23 +103,14 @@
             return false;
         };
         Keyboard.prototype.inputValidation = function (ascii) {
-            if (!this.isInteger(ascii)) {
-                ascii = this.stringToASCII(ascii);
+            if (!WEE.Check.isInteger(ascii)) {
+                ascii = WEE.String.toASCII(ascii);
             }
-            if (this.isASCII(ascii, true)) {
+            if (WEE.Check.isASCII(ascii, true)) {
                 return ascii;
             }
             MOUETTE.Logger.error(ascii + ' is not assignable to a valid ASCII code');
             return false;
-        };
-        Keyboard.prototype.stringToASCII = function (code) {
-            return code.charCodeAt(0);
-        };
-        Keyboard.prototype.isInteger = function (value) {
-            return (value === parseInt(value, 10));
-        };
-        Keyboard.prototype.isASCII = function (code, extended) {
-            return (extended ? /^[\x00-\xFF]*$/ : /^[\x00-\x7F]*$/).test(code);
         };
         return Keyboard;
     }());

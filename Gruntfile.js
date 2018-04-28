@@ -186,7 +186,7 @@ module.exports = function(grunt){
       lib: {
         files: [{
           expand: true,
-          cwd: srcDir, 
+          cwd: srcDir,
           src: [ srcDir + '**/*.ts' ]
         }]
       }
@@ -207,14 +207,15 @@ module.exports = function(grunt){
         format:'umd',
         moduleName: projectName,
         external: [
+          path.resolve( './bower_components/Weejs/dist/wee.js' ),
           path.resolve( './bower_components/Mouettejs/dist/mouette.js' )
         ],
         banner: banner
       },
       bundle:{
         files: [ {
-          src : compiledSrcDir + projectNameLC + '.js', 
-          dest : distDir + projectNameLC + '.js' 
+          src : compiledSrcDir + projectNameLC + '.js',
+          dest : distDir + projectNameLC + '.js'
         } ]
       }
     },
@@ -449,7 +450,7 @@ module.exports = function(grunt){
     watch: {
       lib: {
         files: srcDir + 'ts/**/*.ts',
-        tasks: ['dist'],  
+        tasks: ['dist'],
       },
       webpug:{
         files: webDir + 'views/**/*.pug'
@@ -526,7 +527,7 @@ module.exports = function(grunt){
   //                       'symlink:fonts', 'symlink:fontAwesome', 'symlink:public', 'symlink:doc'
   //                     ]
   //                   );
-                    
+
   // grunt.registerTask( 'zip',
   //                     'create the zip package',
   //                     ['compress']
@@ -545,7 +546,7 @@ module.exports = function(grunt){
                           'bower_concat',
                           'uglify:bower',
                           'uglify:web',
-                          'concat:webjs', 
+                          'concat:webjs',
                         //css
                           'sass',
                           'cssmin',

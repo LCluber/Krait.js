@@ -6,8 +6,9 @@
     "dist/krait.js"
   ],
   "description": "Key bindings library written in TypeScript.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "dependencies": {
+    "Weejs": "git+https://github.com/LCluber/Wee.js.git",
     "Mouettejs": "git+https://github.com/LCluber/Mouette.js.git"
   }
 }

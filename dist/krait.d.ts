@@ -39,7 +39,4 @@ export declare class Keyboard {
     addInput(character: string | number, callback: Function, scope: any): number | false;
     setInput(oldCharacter: string | number, newCharacter: string | number): boolean;
     private inputValidation(ascii);
-    private stringToASCII(code);
-    private isInteger(value);
-    private isASCII(code, extended);
 }

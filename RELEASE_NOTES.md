@@ -1,3 +1,6 @@
+Version 0.2.2 (April 28th 2018)
+-----------------------------
+ * Added Wee.js utility library
 
 Version 0.2.1 (March 19th 2018)
 -----------------------------
