@@ -1,6 +1,6 @@
-import * as WEE from '../../bower_components/Weejs/dist/wee';
-import * as MOUETTE from '../../bower_components/Mouettejs/dist/mouette';
-import { Input } from './input';
+import { Check, String } from '../../bower_components/Weejs/dist/wee';
+import * as MOUETTE      from '../../bower_components/Mouettejs/dist/mouette';
+import { Input }         from './input';
 
 export class Keyboard {
 
@@ -90,10 +90,10 @@ export class Keyboard {
   // }
 
   private inputValidation(ascii: string|number): number|false {
-    if (!WEE.Check.isInteger(ascii)) {
-      ascii = WEE.String.toASCII(<string>ascii);
+    if (!Check.isInteger(ascii)) {
+      ascii = String.toASCII(<string>ascii);
     }
-    if (WEE.Check.isASCII(ascii, true)) {//valid ascii code
+    if (Check.isASCII(ascii, true)) {//valid ascii code
       return <number>ascii;
     }
     MOUETTE.Logger.error(ascii + ' is not assignable to a valid ASCII code');

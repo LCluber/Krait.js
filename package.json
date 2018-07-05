@@ -63,7 +63,6 @@
     "grunt-tslint": "5.0.1",
     "grunt-rollup": "4.0.0",
     "time-grunt": "1.4.0",
-    "tslint": "5.8.0",
-    "typescript": "2.6.1"
+    "tslint": "5.8.0"
   }
 }
