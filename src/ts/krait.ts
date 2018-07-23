@@ -1,6 +1,6 @@
-import { Check, String } from '../../bower_components/Weejs/dist/wee';
-import * as MOUETTE      from '../../bower_components/Mouettejs/dist/mouette';
-import { Input }         from './input';
+import { Check, String } from 'weejs';
+import {Logger} from 'mouettejs';
+import { Input } from './input';
 
 export class Keyboard {
 
@@ -22,7 +22,7 @@ export class Keyboard {
   public down(a: KeyboardEvent) {
     if (this[a.which] !== undefined) {//pushed input is in the controls list
       this[a.which].Down(a);
-      MOUETTE.Logger.info('Key ' + a.which + ' pressed');
+      Logger.info('Key ' + a.which + ' pressed');
     }
     /*for(var i = 0 ; i < this.nb ; i++){
         var v = this.list[i];
@@ -38,7 +38,7 @@ export class Keyboard {
   public up(a: KeyboardEvent) {
     if (this[a.which] !== undefined) {//pushed input is in the controls list
       this[a.which].Up();
-      MOUETTE.Logger.info('Key ' + a.which + ' released');
+      Logger.info('Key ' + a.which + ' released');
     }
     /*for(var i = 0 ; i < this.nb ; i++){
       var v = this.list[i];
@@ -60,7 +60,7 @@ export class Keyboard {
     let ascii: number|false = this.inputValidation(character);
     if (ascii) {//valid ascii code
       this[ascii] = new Input(ascii, callback, scope);
-      MOUETTE.Logger.info('Added new input with ASCII code ' + character);
+      Logger.info('Added new input with ASCII code ' + character);
       return ascii;
     }
     return false;
@@ -74,12 +74,12 @@ export class Keyboard {
         if (newASCII) {
           this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
           delete this[oldASCII];
-          MOUETTE.Logger.info(oldASCII + ' is now set to ' + newASCII);
+          Logger.info(oldASCII + ' is now set to ' + newASCII);
           return true;
         }
         return false;
       }
-      MOUETTE.Logger.error(oldASCII + ' input not found');
+      Logger.error(oldASCII + ' input not found');
       return false;
     }
     return false;
@@ -96,7 +96,7 @@ export class Keyboard {
     if (Check.isASCII(ascii, true)) {//valid ascii code
       return <number>ascii;
     }
-    MOUETTE.Logger.error(ascii + ' is not assignable to a valid ASCII code');
+    Logger.error(ascii + ' is not assignable to a valid ASCII code');
     return false;
   }
 

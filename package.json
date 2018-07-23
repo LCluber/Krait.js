@@ -1,27 +1,39 @@
 {
-  "name": "Kraitjs",
-  "version": "0.2.3",
+  "name": "kraitjs",
+  "version": "0.2.4",
   "description": "javascript library",
   "keywords": [
     "finite state machine"
   ],
   "homepage": "http://kraitjs.lcluber.com",
+  "main": "dist/krait",
+  "types": "dist/krait",
   "bugs": {
     "url": "https://github.com/LCluber/Krait.js/issues"
   },
-  "license": {
-    "type": "MIT",
-    "url": "http://www.opensource.org/licenses/mit-license.php"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LCluber/Krait.js.git"
   },
+  "license": "See license in LICENSE.md",
   "author": {
     "name": "Ludovic Cluber",
     "url": "http://www.lcluber.com/",
     "email": "http://www.lcluber.com/contact"
   },
-  "private": true,
+  "contributors": [
+    {
+      "name": "Estelle Picq",
+      "email": "",
+      "url": "http://www.estellepicq.com"
+    }
+  ],
   "scripts": {
     "start": "node ./bin/www"
   },
+  "files": [
+    "dist/"
+  ],
   "dependencies": {
     "body-parser": "1.16.1",
     "cookie-parser": "1.4.3",
@@ -31,30 +43,29 @@
     "serve-favicon": "2.4.0",
     "i18next": "4.0.0",
     "i18next-express-middleware": "1.0.2",
-    "i18next-node-fs-backend": "0.1.3"
+    "i18next-node-fs-backend": "0.1.3",
+    "weejs": "git://github.com/LCluber/Wee.js.git",
+    "mouettejs": "git://github.com/LCluber/Mouette.js.git"
   },
   "devDependencies": {
+    "babel-core": "6.26.3",
+    "babel-preset-es2015": "6.24.1",
     "bootstrap": "3.3.7",
     "font-awesome": "4.7.0",
     "jquery": "3.2.1",
     "jquery-easing": "0.0.1",
     "connect-livereload": "0.6.0",
     "grunt": "1.0.1",
-    "grunt-bower-concat": "1.0.0",
     "grunt-contrib-clean": "1.1.0",
     "grunt-contrib-uglify": "3.0.1",
     "grunt-contrib-cssmin": "2.2.0",
     "grunt-contrib-concat": "1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-pug": "1.0.0",
+    "grunt-contrib-copy": "1.0.0",
     "grunt-contrib-sass": "1.0.0",
     "grunt-contrib-htmlmin": "2.4.0",
-    "grunt-contrib-symlink": "1.0.0",
-    "grunt-contrib-compress": "1.4.3",
     "grunt-contrib-jshint": "1.1.0",
     "grunt-contrib-csslint": "2.0.0",
-    "grunt-strip-code": "^1.0.6",
-    "grunt-jsdoc": "2.1.0",
+    "grunt-strip-code": "1.0.6",
     "grunt-contrib-watch": "1.0.0",
     "grunt-concurrent": "2.3.1",
     "grunt-nodemon": "0.4.2",
@@ -62,9 +73,11 @@
     "grunt-ts": "5.5.1",
     "grunt-tslint": "5.0.1",
     "grunt-typedoc": "0.2.4",
-    "grunt-rollup": "4.0.0",
+    "grunt-rollup": "9.0.0",
+    "rollup-plugin-babel": "3.0.4",
+    "rollup-plugin-node-resolve": "3.3.0",
     "time-grunt": "1.4.0",
-    "tslint": "5.8.0",
+    "tslint": "5.9.1",
     "typedoc": "0.11.1",
     "typescript": "2.9.2"
   }

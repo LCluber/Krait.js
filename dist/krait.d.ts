@@ -22,21 +22,3 @@
 *
 * http://kraitjs.lcluber.com
 */
-export declare class Input {
-    defaultASCII: number;
-    callback: Function;
-    scope: any;
-    constructor(ascii: number, callback: Function, scope: any);
-    setDefaultASCII(ascii: number): void;
-    Down(a: KeyboardEvent): void;
-    Up(): void;
-}
-export declare class Keyboard {
-    constructor();
-    private initListeners();
-    down(a: KeyboardEvent): void;
-    up(a: KeyboardEvent): void;
-    addInput(character: string | number, callback: Function, scope: any): number | false;
-    setInput(oldCharacter: string | number, newCharacter: string | number): boolean;
-    private inputValidation(ascii);
-}

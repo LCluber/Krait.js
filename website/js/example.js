@@ -4,7 +4,7 @@ var icon1 = findById('skill1');
 var icon2 = findById('skill2');
 var icon3 = findById('skill3');
 
-var keyboard = new KRAIT.Keyboard();
+var keyboard = new Krait.Keyboard();
 
 keyboard.addInput( /*'action0', */ 65, action0, null );
 keyboard.addInput( /*'action1', */'G', action1, null );

@@ -1,3 +1,8 @@
+Version 0.2.4 (July 23th 2018)
+------------------------------
+ * Library exported as ES6 and IIFE modules instead of UMD.
+ * KRAIT namespace becomes Krait
+
 Version 0.2.3 (July 4th 2018)
 ------------------------------
  * Documentation automatically generated in /doc folder
