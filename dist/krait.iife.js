@@ -582,9 +582,6 @@ var Krait = (function (exports) {
                 this.callback = this.callback.bind(scope);
             }
         }
-        Input.prototype.setDefaultASCII = function (ascii) {
-            this.defaultASCII = ascii;
-        };
         Input.prototype.Down = function (a) {
             a.preventDefault();
             this.callback(true);
@@ -635,7 +632,7 @@ var Krait = (function (exports) {
                 if (this.hasOwnProperty(oldASCII + '')) {
                     var newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
                     if (newASCII) {
-                        this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
+                        this[newASCII].defaultASCII = this[oldASCII].defaultASCII;
                         delete this[oldASCII];
                         Logger.info(oldASCII + ' is now set to ' + newASCII);
                         return true;

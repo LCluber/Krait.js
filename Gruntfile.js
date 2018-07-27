@@ -299,6 +299,7 @@ module.exports = function(grunt){
         },
         src: [  nodeDir   + 'jquery/dist/jquery.min.js',
                 nodeDir   + 'bootstrap/dist/js/bootstrap.min.js',
+                nodeDir   + 'weejs/dist/wee.iife.min.js',
                 distDir   + projectNameLC + '.iife.min.js',
                 publicDir + 'js/main.min.js'
             ],

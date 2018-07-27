@@ -1,3 +1,7 @@
+Version 0.2.5 (July 27th 2018)
+------------------------------
+ * deleted useless method in Input class
+
 Version 0.2.4 (July 23th 2018)
 ------------------------------
  * Library exported as ES6 and IIFE modules instead of UMD.

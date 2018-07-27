@@ -34,9 +34,6 @@ class Input {
             this.callback = this.callback.bind(scope);
         }
     }
-    setDefaultASCII(ascii) {
-        this.defaultASCII = ascii;
-    }
     Down(a) {
         a.preventDefault();
         this.callback(true);
@@ -85,7 +82,7 @@ class Keyboard {
             if (this.hasOwnProperty(oldASCII + '')) {
                 let newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
                 if (newASCII) {
-                    this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
+                    this[newASCII].defaultASCII = this[oldASCII].defaultASCII;
                     delete this[oldASCII];
                     Logger.info(oldASCII + ' is now set to ' + newASCII);
                     return true;

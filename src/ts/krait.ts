@@ -8,7 +8,7 @@ export class Keyboard {
     this.initListeners();
   }
 
-  private initListeners() {
+  private initListeners(): void {
     //keyboard listeners
     //var _this = this;
     document.onkeydown = (a: KeyboardEvent) => {
@@ -19,7 +19,7 @@ export class Keyboard {
     };
   }
 
-  public down(a: KeyboardEvent) {
+  public down(a: KeyboardEvent): void {
     if (this[a.which] !== undefined) {//pushed input is in the controls list
       this[a.which].Down(a);
       Logger.info('Key ' + a.which + ' pressed');
@@ -35,7 +35,7 @@ export class Keyboard {
     }*/
   }
 
-  public up(a: KeyboardEvent) {
+  public up(a: KeyboardEvent): void {
     if (this[a.which] !== undefined) {//pushed input is in the controls list
       this[a.which].Up();
       Logger.info('Key ' + a.which + ' released');
@@ -72,7 +72,7 @@ export class Keyboard {
       if (this.hasOwnProperty(oldASCII+'')) {//oldASCII found as parameter
         let newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
         if (newASCII) {
-          this[newASCII].setDefaultASCII(this[oldASCII].defaultASCII);
+          this[newASCII].defaultASCII = this[oldASCII].defaultASCII;
           delete this[oldASCII];
           Logger.info(oldASCII + ' is now set to ' + newASCII);
           return true;
