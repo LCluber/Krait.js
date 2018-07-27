@@ -1,7 +1,7 @@
 
 export class Input {
 
-  defaultASCII : number; //first ascii code assigned  will be kept here
+  defaultASCII : number; //first ascii code assigned will be kept here
   callback : Function;
   scope : any;
 
