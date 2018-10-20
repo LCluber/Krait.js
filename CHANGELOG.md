@@ -1,3 +1,11 @@
+Version 0.3.0 (October 21th 2018)
+-----------------------------
+ * Multiple keystroke detection
+ * Ctrl, Alt, Shift detection
+ * addInput method now called addCommand and accept an array of keys.
+ * Krait.js published on NPM at @lcluber/kraitjs.
+ * Updated README.md with NPM installation procedure.
+
 Version 0.2.5 (July 27th 2018)
 ------------------------------
  * deleted useless method in Input class

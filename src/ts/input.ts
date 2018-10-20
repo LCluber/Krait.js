@@ -2,28 +2,23 @@
 export class Input {
 
   defaultASCII : number; //first ascii code assigned will be kept here
-  callback : Function;
-  scope : any;
+  pressed : boolean;
 
-  constructor (ascii: number, callback: Function, scope: any) {
+  constructor (ascii: number) {
 
     this.defaultASCII = ascii;
-    this.callback     = callback;
-    if( scope ){
-      this.callback   = this.callback.bind( scope );
-    }
+    this.pressed = false;
 
   }
 
   Down (a: KeyboardEvent): void {
-    //this.pushed=1;
     a.preventDefault();
-    this.callback(true);
+    this.pressed = true;
   }
 
   Up (): void {
-    //this.pushed=0;
-    //if(this.listenUp)
-    this.callback(false);
+    // if(this.listenUp)
+    this.pressed = false;
   }
+
 }

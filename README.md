@@ -1,10 +1,6 @@
 ## Synopsis
 
-Krait.js is a key bindings library written in TypeScript.
-
-## Code Example
-
- [See a basic example on the dedicated website](http://kraitjs.lcluber.com/#source).
+[Krait.js](http://kraitjs.lcluber.com) is a key bindings library written in TypeScript with multiple keystroke detection.
 
 ## Motivation
 
@@ -12,11 +8,22 @@ The purpose of this library is to provide a simple and easy to use key binding d
 
 ## Installation
 
-To use **Krait.js** download it **[here](http://kraitjs.lcluber.com/#download)** and learn how to use it **[there](http://kraitjs.lcluber.com/#example)**.
+```bash
+$ npm install @lcluber/kraitjs
+```
+Or download it **[here](http://kraitjs.lcluber.com/#download)**.
+
+## Demo
+
+See a basic example **[here](http://kraitjs.lcluber.com/#example)**.
+
+## Usage
+
+Learn how to use it **[here](http://kraitjs.lcluber.com/#source)**.
 
 ## API Reference
 
-[See the documentation on the dedicated website](http://kraitjs.lcluber.com/doc/).
+Read the documentation **[here](http://kraitjs.lcluber.com/doc/)**.
 
 ## Tests
 

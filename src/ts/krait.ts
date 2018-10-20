@@ -1,16 +1,19 @@
-import { Check, String } from 'weejs';
-import {Logger} from 'mouettejs';
-import { Input } from './input';
+import { Check, String } from '@lcluber/weejs';
+import { Logger } from '@lcluber/mouettejs';
+import { Command } from './command';
 
 export class Keyboard {
 
+  map: Object;
+  commands: Array<Command>;
+
   constructor() {
     this.initListeners();
+    this.commands = [];
   }
 
   private initListeners(): void {
     //keyboard listeners
-    //var _this = this;
     document.onkeydown = (a: KeyboardEvent) => {
       this.down(a);
     };
@@ -20,74 +23,86 @@ export class Keyboard {
   }
 
   public down(a: KeyboardEvent): void {
-    if (this[a.which] !== undefined) {//pushed input is in the controls list
-      this[a.which].Down(a);
-      Logger.info('Key ' + a.which + ' pressed');
+
+    let isCommandStarted = false;
+    for (let command of this.commands) {
+      if (command.start(a) && !isCommandStarted) {
+        isCommandStarted = true;
+        Logger.info('Command ' + command.name + ' started');
+      }
     }
-    /*for(var i = 0 ; i < this.nb ; i++){
-        var v = this.list[i];
-    if(v.ascii == a.which){
-        a.preventDefault();
-        //if(!v.pushed)
-            v.down();
-        break;
-    }
-    }*/
   }
 
   public up(a: KeyboardEvent): void {
-    if (this[a.which] !== undefined) {//pushed input is in the controls list
-      this[a.which].Up();
-      Logger.info('Key ' + a.which + ' released');
-    }
-    /*for(var i = 0 ; i < this.nb ; i++){
-      var v = this.list[i];
-      if(v.ascii == a.which){
-        v.up();
-        for(var j = 0 ; j < this.list.nb ; j++){
-          if(j != i){
-            v = this.list.list[j];
-            if(v.pushed)
-              v.down();
-          }
-        }
-        break;
+    let isCommandStopped = false;
+    for (let command of this.commands) {
+      if (command.stop(a.which) && !isCommandStopped) {
+        isCommandStopped = true;
+        Logger.info('Command ' + command.name + ' stopped');
       }
-    }*/
+    }
   }
 
-  public addInput(character: string|number, callback: Function, scope: any): number|false {
-    let ascii: number|false = this.inputValidation(character);
-    if (ascii) {//valid ascii code
-      this[ascii] = new Input(ascii, callback, scope);
-      Logger.info('Added new input with ASCII code ' + character);
-      return ascii;
+  public addCommand(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, keys: Array<string|number>, callback: Function, scope: any): boolean {
+    let asciiCodes = this.getAsciiCodes(keys);
+    if (asciiCodes) {
+      this.commands.push(new Command(name, ctrlKey, altkey, shiftKey, asciiCodes, callback, scope));
+      this.commands = this.sortCommands(this.commands);
+      return true;
     }
     return false;
   }
 
-  public setInput(oldCharacter: string|number, newCharacter: string|number): boolean {
-    let oldASCII: number|false = this.inputValidation(oldCharacter);
-    if (oldASCII) {//valid ascii code
-      if (this.hasOwnProperty(oldASCII+'')) {//oldASCII found as parameter
-        let newASCII = this.addInput(newCharacter, this[oldASCII].callback, this[oldASCII].scope);
-        if (newASCII) {
-          this[newASCII].defaultASCII = this[oldASCII].defaultASCII;
-          delete this[oldASCII];
-          Logger.info(oldASCII + ' is now set to ' + newASCII);
-          return true;
-        }
+  public setInputs(name: string,  ctrlKey: boolean, altkey: boolean, shiftKey: boolean, newKeys: Array<string|number>): boolean {
+    let asciiCodes = this.getAsciiCodes(newKeys);
+    if (asciiCodes) {
+      let command = this.getCommandByName(name);
+      if (command) {
+        command.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
+        Logger.info(command.name + ' is now set to ' + JSON.stringify(newKeys));
+        this.commands = this.sortCommands(this.commands);
+        return true;
+      }
+    }
+    return false;
+  }
+
+  public default(name: string): boolean {
+    let command = this.getCommandByName(name);
+    if (command) {
+      command.default();
+      this.commands = this.sortCommands(this.commands);
+      return true;
+    }
+  }
+
+  private sortCommands(commands: Array<Command>): Array<Command> {
+    commands.sort(function(a,b) {
+      return b.inputsLength - a.inputsLength;
+    });
+    return commands;
+  }
+
+  private getCommandByName(name: string): Command|false {
+    for (let command of this.commands) {
+      if (command.name == name) {
+        return command;
+      }
+    }
+    return false;
+  }
+
+  private getAsciiCodes(keys: Array<string|number>): Array<number>|false {
+    let asciiCodes = [];
+    for(let key of keys) {
+      let ascii: number|false = this.inputValidation(key);
+      if (!ascii) {
         return false;
       }
-      Logger.error(oldASCII + ' input not found');
-      return false;
+       asciiCodes.push(ascii);
     }
-    return false;
+    return asciiCodes;
   }
-
-  // public getLastLog(): string{
-  //   return this.log;
-  // }
 
   private inputValidation(ascii: string|number): number|false {
     if (!Check.isInteger(ascii)) {

@@ -22,3 +22,45 @@
 *
 * http://kraitjs.lcluber.com
 */
+export declare class Command {
+    name: string;
+    callback: Function;
+    scope: any;
+    inputs: Object;
+    inputsLength: number;
+    started: boolean;
+    ctrlKey: boolean;
+    altKey: boolean;
+    shiftKey: boolean;
+    defaultCtrlKey: boolean;
+    defaultAltKey: boolean;
+    defaultShiftKey: boolean;
+    constructor(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, asciiCodes: Array<number>, callback: Function, scope: any);
+    start(a: KeyboardEvent): boolean;
+    stop(key: number): boolean;
+    setInputs(ctrlKey: boolean, altkey: boolean, shiftKey: boolean, asciiCodes: Array<number>): void;
+    default(): void;
+}
+export declare class Input {
+    defaultASCII: number;
+    pressed: boolean;
+    constructor(ascii: number);
+    Down(a: KeyboardEvent): void;
+    Up(): void;
+}
+
+export declare class Keyboard {
+    map: Object;
+    commands: Array<Command>;
+    constructor();
+    private initListeners;
+    down(a: KeyboardEvent): void;
+    up(a: KeyboardEvent): void;
+    addCommand(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, keys: Array<string | number>, callback: Function, scope: any): boolean;
+    setInputs(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, newKeys: Array<string | number>): boolean;
+    default(name: string): boolean;
+    private sortCommands;
+    private getCommandByName;
+    private getAsciiCodes;
+    private inputValidation;
+}
