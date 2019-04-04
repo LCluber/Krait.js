@@ -4,8 +4,8 @@ import { Command } from './command';
 
 export class Keyboard {
 
-  map: Object;
-  commands: Array<Command>;
+  // map: Object;
+  commands: Command[];
 
   constructor() {
     this.initListeners();
@@ -74,25 +74,26 @@ export class Keyboard {
       this.commands = this.sortCommands(this.commands);
       return true;
     }
+    return false;
   }
 
-  private sortCommands(commands: Array<Command>): Array<Command> {
+  private sortCommands(commands: Command[]): Command[] {
     commands.sort(function(a,b) {
       return b.inputsLength - a.inputsLength;
     });
     return commands;
   }
 
-  private getCommandByName(name: string): Command|false {
+  private getCommandByName(name: string): Command|null {
     for (let command of this.commands) {
       if (command.name == name) {
         return command;
       }
     }
-    return false;
+    return null;
   }
 
-  private getAsciiCodes(keys: Array<string|number>): Array<number>|false {
+  private getAsciiCodes(keys: Array<string|number>): number[]|false {
     let asciiCodes = [];
     for(let key of keys) {
       let ascii: number|false = this.inputValidation(key);

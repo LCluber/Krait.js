@@ -1008,7 +1008,7 @@ var Krait = (function (exports) {
             for (var property in this.inputs) {
                 if (this.inputs.hasOwnProperty(property)) {
                     var oldInput = this.inputs[property];
-                    if (property !== oldInput.defaultASCII) {
+                    if (+property !== oldInput.defaultASCII) {
                         this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
                         delete this.inputs[property];
                         this.ctrlKey = this.defaultCtrlKey;
@@ -1085,6 +1085,7 @@ var Krait = (function (exports) {
                 this.commands = this.sortCommands(this.commands);
                 return true;
             }
+            return false;
         };
         Keyboard.prototype.sortCommands = function (commands) {
             commands.sort(function (a, b) {
@@ -1099,7 +1100,7 @@ var Krait = (function (exports) {
                     return command;
                 }
             }
-            return false;
+            return null;
         };
         Keyboard.prototype.getAsciiCodes = function (keys) {
             var asciiCodes = [];

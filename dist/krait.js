@@ -98,7 +98,7 @@ class Command {
         for (let property in this.inputs) {
             if (this.inputs.hasOwnProperty(property)) {
                 let oldInput = this.inputs[property];
-                if (property !== oldInput.defaultASCII) {
+                if (+property !== oldInput.defaultASCII) {
                     this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
                     delete this.inputs[property];
                     this.ctrlKey = this.defaultCtrlKey;
@@ -171,6 +171,7 @@ class Keyboard {
             this.commands = this.sortCommands(this.commands);
             return true;
         }
+        return false;
     }
     sortCommands(commands) {
         commands.sort(function (a, b) {
@@ -184,7 +185,7 @@ class Keyboard {
                 return command;
             }
         }
-        return false;
+        return null;
     }
     getAsciiCodes(keys) {
         let asciiCodes = [];

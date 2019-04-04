@@ -22,11 +22,15 @@
 *
 * http://kraitjs.lcluber.com
 */
+
+export interface Inputs {
+    [key: number]: Input;
+}
 export declare class Command {
     name: string;
     callback: Function;
     scope: any;
-    inputs: Object;
+    inputs: Inputs;
     inputsLength: number;
     started: boolean;
     ctrlKey: boolean;
@@ -50,8 +54,7 @@ export declare class Input {
 }
 
 export declare class Keyboard {
-    map: Object;
-    commands: Array<Command>;
+    commands: Command[];
     constructor();
     private initListeners;
     down(a: KeyboardEvent): void;

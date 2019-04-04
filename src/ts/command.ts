@@ -1,12 +1,16 @@
 import { Input } from './input';
 import { Logger } from '@lcluber/mouettejs';
 
+export interface Inputs {
+  [key: number]: Input;
+}
+
 export class Command {
 
   name : string;
   callback : Function;
   scope : any;
-  inputs : Object;
+  inputs : Inputs;
   inputsLength : number;
   started : boolean;
 
@@ -81,7 +85,7 @@ export class Command {
     for (let property in this.inputs) {
       if(this.inputs.hasOwnProperty(property)) {
         let oldInput = this.inputs[property];
-        if (property !== oldInput.defaultASCII) {
+        if (+property !== oldInput.defaultASCII) {
           this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
           delete this.inputs[property];
           this.ctrlKey = this.defaultCtrlKey;
