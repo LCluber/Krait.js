@@ -1,7 +1,6 @@
 
 node_modules/
-website/sass/build/
-website/js/build/
+web/sass/build/
 build/
 .sass-cache/
 .tscache/
