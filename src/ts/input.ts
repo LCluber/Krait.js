@@ -1,24 +1,19 @@
-
 export class Input {
+  public defaultASCII: number; //first ascii code assigned will be kept here
+  public pressed: boolean;
 
-  defaultASCII : number; //first ascii code assigned will be kept here
-  pressed : boolean;
-
-  constructor (ascii: number) {
-
+  constructor(ascii: number) {
     this.defaultASCII = ascii;
     this.pressed = false;
-
   }
 
-  Down (a: KeyboardEvent): void {
+  Down(a: KeyboardEvent): void {
     a.preventDefault();
     this.pressed = true;
   }
 
-  Up (): void {
+  Up(): void {
     // if(this.listenUp)
     this.pressed = false;
   }
-
 }

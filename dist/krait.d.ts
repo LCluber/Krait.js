@@ -28,17 +28,17 @@ export interface Inputs {
 }
 export declare class Command {
     name: string;
-    callback: Function;
-    scope: any;
-    inputs: Inputs;
+    private callback;
+    private inputs;
     inputsLength: number;
-    started: boolean;
-    ctrlKey: boolean;
-    altKey: boolean;
-    shiftKey: boolean;
-    defaultCtrlKey: boolean;
-    defaultAltKey: boolean;
-    defaultShiftKey: boolean;
+    private started;
+    private ctrlKey;
+    private altKey;
+    private shiftKey;
+    private defaultCtrlKey;
+    private defaultAltKey;
+    private defaultShiftKey;
+    private log;
     constructor(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, asciiCodes: Array<number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
@@ -52,9 +52,9 @@ export declare class Input {
     Down(a: KeyboardEvent): void;
     Up(): void;
 }
-
 export declare class Keyboard {
-    commands: Command[];
+    private commands;
+    private log;
     constructor();
     private initListeners;
     down(a: KeyboardEvent): void;

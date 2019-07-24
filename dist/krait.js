@@ -23,8 +23,30 @@
 * http://kraitjs.lcluber.com
 */
 
-import { Check, String } from '@lcluber/weejs';
+import { String } from '@lcluber/weejs';
 import { Logger } from '@lcluber/mouettejs';
+
+/* MIT License
+
+Copyright (c) 2009 Ludovic CLUBER
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+https://github.com/LCluber/Ch.js
+*/
+function isAscii(code, extended) {
+    if (isInteger(code)) {
+        return (extended && code >= 0 && code <= 255) || (code >= 0 && code <= 127);
+    }
+    return false;
+}
+function isInteger(number) {
+    return number === parseInt(number, 10);
+}
 
 class Input {
     constructor(ascii) {
@@ -52,7 +74,8 @@ class Command {
         if (scope) {
             this.callback = this.callback.bind(scope);
         }
-        Logger.info('Added new command ' + this.name);
+        this.log = Logger.addGroup("Krait");
+        this.log.info('Added new command ' + this.name);
     }
     start(a) {
         if (this.inputs.hasOwnProperty(a.which)) {
@@ -66,9 +89,9 @@ class Command {
             }
         }
         if (this.ctrlKey == a.ctrlKey && this.altKey == a.altKey && this.shiftKey == a.shiftKey) {
-            this.callback(true);
             this.started = true;
-            return true;
+            this.callback(this.started);
+            return this.started;
         }
         return false;
     }
@@ -78,6 +101,7 @@ class Command {
         }
         if (this.started) {
             this.started = false;
+            this.callback(this.started);
             return true;
         }
         return false;
@@ -107,7 +131,7 @@ class Command {
                 }
             }
         }
-        Logger.info(this.name + ' is now set to default');
+        this.log.info(this.name + ' is now set to default');
     }
 }
 
@@ -115,6 +139,7 @@ class Keyboard {
     constructor() {
         this.initListeners();
         this.commands = [];
+        this.log = Logger.addGroup("Krait");
     }
     initListeners() {
         document.onkeydown = (a) => {
@@ -129,7 +154,7 @@ class Keyboard {
         for (let command of this.commands) {
             if (command.start(a) && !isCommandStarted) {
                 isCommandStarted = true;
-                Logger.info('Command ' + command.name + ' started');
+                this.log.info('Command ' + command.name + ' started');
             }
         }
     }
@@ -138,7 +163,7 @@ class Keyboard {
         for (let command of this.commands) {
             if (command.stop(a.which) && !isCommandStopped) {
                 isCommandStopped = true;
-                Logger.info('Command ' + command.name + ' stopped');
+                this.log.info('Command ' + command.name + ' stopped');
             }
         }
     }
@@ -157,7 +182,7 @@ class Keyboard {
             let command = this.getCommandByName(name);
             if (command) {
                 command.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
-                Logger.info(command.name + ' is now set to ' + JSON.stringify(newKeys));
+                this.log.info(command.name + ' is now set to ' + JSON.stringify(newKeys));
                 this.commands = this.sortCommands(this.commands);
                 return true;
             }
@@ -199,13 +224,13 @@ class Keyboard {
         return asciiCodes;
     }
     inputValidation(ascii) {
-        if (!Check.isInteger(ascii)) {
+        if (!isInteger(ascii)) {
             ascii = String.toASCII(ascii);
         }
-        if (Check.isASCII(ascii, true)) {
+        if (isAscii(ascii, true)) {
             return ascii;
         }
-        Logger.error(ascii + ' is not assignable to a valid ASCII code');
+        this.log.error(ascii + ' is not assignable to a valid ASCII code');
         return false;
     }
 }
