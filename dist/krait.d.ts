@@ -22,7 +22,8 @@
 *
 * http://kraitjs.lcluber.com
 */
-
+import { Input } from "./input";
+import { CtrlKeys } from "./interfaces";
 export interface Inputs {
     [key: number]: Input;
 }
@@ -32,18 +33,15 @@ export declare class Command {
     private inputs;
     inputsLength: number;
     private started;
-    private ctrlKey;
-    private altKey;
-    private shiftKey;
-    private defaultCtrlKey;
-    private defaultAltKey;
-    private defaultShiftKey;
+    private ctrlKeys;
+    private defaultControlKeys;
     private log;
-    constructor(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, asciiCodes: Array<number>, callback: Function, scope: any);
+    constructor(name: string, ctrlKeys: CtrlKeys, asciiCodes: Array<number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
-    setInputs(ctrlKey: boolean, altkey: boolean, shiftKey: boolean, asciiCodes: Array<number>): void;
+    setInputs(ctrlKeys: CtrlKeys, asciiCodes: Array<number>): void;
     default(): void;
+    private copyDefaultToCtrls;
 }
 export declare class Input {
     defaultASCII: number;
@@ -52,6 +50,12 @@ export declare class Input {
     Down(a: KeyboardEvent): void;
     Up(): void;
 }
+export interface CtrlKeys {
+    ctrl?: boolean;
+    alt?: boolean;
+    shift?: boolean;
+}
+import { CtrlKeys } from "./interfaces";
 export declare class Keyboard {
     private commands;
     private log;
@@ -59,8 +63,8 @@ export declare class Keyboard {
     private initListeners;
     down(a: KeyboardEvent): void;
     up(a: KeyboardEvent): void;
-    addCommand(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, keys: Array<string | number>, callback: Function, scope: any): boolean;
-    setInputs(name: string, ctrlKey: boolean, altkey: boolean, shiftKey: boolean, newKeys: Array<string | number>): boolean;
+    addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): boolean;
+    setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
     private sortCommands;
     private getCommandByName;

@@ -1,5 +1,6 @@
 import { Input } from "./input";
 import { Logger, Group } from "@lcluber/mouettejs";
+import { CtrlKeys } from "./interfaces";
 
 export interface Inputs {
   [key: number]: Input;
@@ -13,31 +14,27 @@ export class Command {
   public inputsLength: number;
   private started: boolean;
 
-  private ctrlKey: boolean;
-  private altKey: boolean;
-  private shiftKey: boolean;
-
-  private defaultCtrlKey: boolean;
-  private defaultAltKey: boolean;
-  private defaultShiftKey: boolean;
+  private ctrlKeys: CtrlKeys;
+  private defaultControlKeys: CtrlKeys;
 
   private log: Group;
 
   constructor(
     name: string,
-    ctrlKey: boolean,
-    altkey: boolean,
-    shiftKey: boolean,
+    ctrlKeys: CtrlKeys,
     asciiCodes: Array<number>,
     callback: Function,
     scope: any
   ) {
     this.name = name;
     this.started = false;
-    this.defaultCtrlKey = ctrlKey;
-    this.defaultAltKey = altkey;
-    this.defaultShiftKey = shiftKey;
-    this.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
+    this.defaultControlKeys = {
+      ctrl: ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false,
+      alt: ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false,
+      shift: ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false
+    };
+    this.ctrlKeys = {};
+    this.setInputs(ctrlKeys, asciiCodes);
     this.callback = callback;
     if (scope) {
       this.callback = this.callback.bind(scope);
@@ -59,9 +56,9 @@ export class Command {
       }
     }
     if (
-      this.ctrlKey == a.ctrlKey &&
-      this.altKey == a.altKey &&
-      this.shiftKey == a.shiftKey
+      this.ctrlKeys.ctrl === a.ctrlKey &&
+      this.ctrlKeys.alt === a.altKey &&
+      this.ctrlKeys.shift === a.shiftKey
     ) {
       this.started = true;
       this.callback(this.started);
@@ -83,16 +80,14 @@ export class Command {
     return false;
   }
 
-  public setInputs(
-    ctrlKey: boolean,
-    altkey: boolean,
-    shiftKey: boolean,
-    asciiCodes: Array<number>
-  ): void {
+  public setInputs(ctrlKeys: CtrlKeys, asciiCodes: Array<number>): void {
     this.inputs = {};
-    this.ctrlKey = ctrlKey;
-    this.altKey = altkey;
-    this.shiftKey = shiftKey;
+    this.ctrlKeys.ctrl =
+      ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false;
+    this.ctrlKeys.alt =
+      ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false;
+    this.ctrlKeys.shift =
+      ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false;
     for (let asciiCode of asciiCodes) {
       if (!this.inputs.hasOwnProperty("asciiCode")) {
         this.inputs[asciiCode] = new Input(asciiCode);
@@ -108,13 +103,15 @@ export class Command {
         if (+property !== oldInput.defaultASCII) {
           this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
           delete this.inputs[property];
-          this.ctrlKey = this.defaultCtrlKey;
-          this.altKey = this.defaultAltKey;
-          this.shiftKey = this.defaultShiftKey;
+          this.copyDefaultToCtrls();
         }
       }
     }
     this.log.info(this.name + " is now set to default");
+  }
+
+  private copyDefaultToCtrls(): void {
+    this.ctrlKeys = JSON.parse(JSON.stringify(this.defaultControlKeys));
   }
 
   // private setName(asciiCodes: Array<number>): string {

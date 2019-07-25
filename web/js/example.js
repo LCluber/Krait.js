@@ -5,26 +5,58 @@ var icon3 = Wee.Dom.findById("skill3");
 
 var keyboard = new Krait.Keyboard();
 
-keyboard.addCommand("action0", true, false, false, [65], action0, null);
-keyboard.addCommand("action1", false, false, false, ["G"], action1, null);
-keyboard.setInputs("action1", false, false, false, ["Z"]);
-keyboard.addCommand("action2", false, false, false, ["E"], action2, null);
-keyboard.addCommand("action3", false, false, false, ["R", "T"], action3, null);
+keyboard.addCommand(
+  "action0",
+  { ctrl: true, alt: false, shift: false },
+  [65],
+  action0,
+  null
+);
+keyboard.addCommand(
+  "action1",
+  { ctrl: false, alt: false, shift: false },
+  ["G"],
+  action1,
+  null
+);
+keyboard.setInputs("action1", { ctrl: false, alt: false, shift: false }, ["Z"]);
+keyboard.addCommand(
+  "action2",
+  { ctrl: false, alt: false, shift: false },
+  ["E"],
+  action2,
+  null
+);
+keyboard.addCommand(
+  "action3",
+  { ctrl: false, alt: false, shift: false },
+  ["R", "T"],
+  action3,
+  null
+);
 
-function action0() {
-  animate(icon0);
+function action0(down) {
+  if (down) {
+    animate(icon0);
+  }
 }
 
-function action1() {
-  animate(icon1);
+function action1(down) {
+  if (down) {
+    animate(icon1);
+  }
 }
 
-function action2() {
-  animate(icon2);
+function action2(down) {
+  if (down) {
+    animate(icon2);
+  }
 }
 
-function action3() {
-  animate(icon3);
+function action3(down) {
+  if (down) {
+    animate(icon3);
+  }
 }
 
 function animate(icon) {

@@ -63,19 +63,22 @@ class Input {
 }
 
 class Command {
-    constructor(name, ctrlKey, altkey, shiftKey, asciiCodes, callback, scope) {
+    constructor(name, ctrlKeys, asciiCodes, callback, scope) {
         this.name = name;
         this.started = false;
-        this.defaultCtrlKey = ctrlKey;
-        this.defaultAltKey = altkey;
-        this.defaultShiftKey = shiftKey;
-        this.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
+        this.defaultControlKeys = {
+            ctrl: ctrlKeys.hasOwnProperty('ctrl') && ctrlKeys.ctrl ? true : false,
+            alt: ctrlKeys.hasOwnProperty('alt') && ctrlKeys.alt ? true : false,
+            shift: ctrlKeys.hasOwnProperty('shift') && ctrlKeys.shift ? true : false
+        };
+        this.ctrlKeys = {};
+        this.setInputs(ctrlKeys, asciiCodes);
         this.callback = callback;
         if (scope) {
             this.callback = this.callback.bind(scope);
         }
         this.log = Logger.addGroup("Krait");
-        this.log.info('Added new command ' + this.name);
+        this.log.info("Added new command " + this.name);
     }
     start(a) {
         if (this.inputs.hasOwnProperty(a.which)) {
@@ -88,7 +91,9 @@ class Command {
                 }
             }
         }
-        if (this.ctrlKey == a.ctrlKey && this.altKey == a.altKey && this.shiftKey == a.shiftKey) {
+        if (this.ctrlKeys.ctrl === a.ctrlKey &&
+            this.ctrlKeys.alt === a.altKey &&
+            this.ctrlKeys.shift === a.shiftKey) {
             this.started = true;
             this.callback(this.started);
             return this.started;
@@ -106,13 +111,13 @@ class Command {
         }
         return false;
     }
-    setInputs(ctrlKey, altkey, shiftKey, asciiCodes) {
+    setInputs(ctrlKeys, asciiCodes) {
         this.inputs = {};
-        this.ctrlKey = ctrlKey;
-        this.altKey = altkey;
-        this.shiftKey = shiftKey;
+        this.ctrlKeys.ctrl = ctrlKeys.hasOwnProperty('ctrl') && ctrlKeys.ctrl ? true : false;
+        this.ctrlKeys.alt = ctrlKeys.hasOwnProperty('alt') && ctrlKeys.alt ? true : false;
+        this.ctrlKeys.shift = ctrlKeys.hasOwnProperty('shift') && ctrlKeys.shift ? true : false;
         for (let asciiCode of asciiCodes) {
-            if (!this.inputs.hasOwnProperty('asciiCode')) {
+            if (!this.inputs.hasOwnProperty("asciiCode")) {
                 this.inputs[asciiCode] = new Input(asciiCode);
             }
         }
@@ -125,13 +130,14 @@ class Command {
                 if (+property !== oldInput.defaultASCII) {
                     this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
                     delete this.inputs[property];
-                    this.ctrlKey = this.defaultCtrlKey;
-                    this.altKey = this.defaultAltKey;
-                    this.shiftKey = this.defaultShiftKey;
+                    this.copyDefaultToCtrls();
                 }
             }
         }
-        this.log.info(this.name + ' is now set to default');
+        this.log.info(this.name + " is now set to default");
+    }
+    copyDefaultToCtrls() {
+        this.ctrlKeys = JSON.parse(JSON.stringify(this.defaultControlKeys));
     }
 }
 
@@ -154,7 +160,7 @@ class Keyboard {
         for (let command of this.commands) {
             if (command.start(a) && !isCommandStarted) {
                 isCommandStarted = true;
-                this.log.info('Command ' + command.name + ' started');
+                this.log.info("Command " + command.name + " started");
             }
         }
     }
@@ -163,26 +169,26 @@ class Keyboard {
         for (let command of this.commands) {
             if (command.stop(a.which) && !isCommandStopped) {
                 isCommandStopped = true;
-                this.log.info('Command ' + command.name + ' stopped');
+                this.log.info("Command " + command.name + " stopped");
             }
         }
     }
-    addCommand(name, ctrlKey, altkey, shiftKey, keys, callback, scope) {
+    addCommand(name, controls, keys, callback, scope) {
         let asciiCodes = this.getAsciiCodes(keys);
         if (asciiCodes) {
-            this.commands.push(new Command(name, ctrlKey, altkey, shiftKey, asciiCodes, callback, scope));
+            this.commands.push(new Command(name, controls, asciiCodes, callback, scope));
             this.commands = this.sortCommands(this.commands);
             return true;
         }
         return false;
     }
-    setInputs(name, ctrlKey, altkey, shiftKey, newKeys) {
+    setInputs(name, ctrlKeys, newKeys) {
         let asciiCodes = this.getAsciiCodes(newKeys);
         if (asciiCodes) {
             let command = this.getCommandByName(name);
             if (command) {
-                command.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
-                this.log.info(command.name + ' is now set to ' + JSON.stringify(newKeys));
+                command.setInputs(ctrlKeys, asciiCodes);
+                this.log.info(command.name + " is now set to " + JSON.stringify(newKeys));
                 this.commands = this.sortCommands(this.commands);
                 return true;
             }
@@ -230,7 +236,7 @@ class Keyboard {
         if (isAscii(ascii, true)) {
             return ascii;
         }
-        this.log.error(ascii + ' is not assignable to a valid ASCII code');
+        this.log.error(ascii + " is not assignable to a valid ASCII code");
         return false;
     }
 }

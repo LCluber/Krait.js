@@ -2,6 +2,7 @@ import { String } from "@lcluber/weejs";
 import { isInteger, isAscii } from "@lcluber/chjs";
 import { Logger, Group } from "@lcluber/mouettejs";
 import { Command } from "./command";
+import { CtrlKeys } from "./interfaces";
 
 export class Keyboard {
   // map: Object;
@@ -46,9 +47,7 @@ export class Keyboard {
 
   public addCommand(
     name: string,
-    ctrlKey: boolean,
-    altkey: boolean,
-    shiftKey: boolean,
+    controls: CtrlKeys,
     keys: Array<string | number>,
     callback: Function,
     scope: any
@@ -56,15 +55,7 @@ export class Keyboard {
     let asciiCodes = this.getAsciiCodes(keys);
     if (asciiCodes) {
       this.commands.push(
-        new Command(
-          name,
-          ctrlKey,
-          altkey,
-          shiftKey,
-          asciiCodes,
-          callback,
-          scope
-        )
+        new Command(name, controls, asciiCodes, callback, scope)
       );
       this.commands = this.sortCommands(this.commands);
       return true;
@@ -74,16 +65,14 @@ export class Keyboard {
 
   public setInputs(
     name: string,
-    ctrlKey: boolean,
-    altkey: boolean,
-    shiftKey: boolean,
+    ctrlKeys: CtrlKeys,
     newKeys: Array<string | number>
   ): boolean {
     let asciiCodes = this.getAsciiCodes(newKeys);
     if (asciiCodes) {
       let command = this.getCommandByName(name);
       if (command) {
-        command.setInputs(ctrlKey, altkey, shiftKey, asciiCodes);
+        command.setInputs(ctrlKeys, asciiCodes);
         this.log.info(
           command.name + " is now set to " + JSON.stringify(newKeys)
         );
