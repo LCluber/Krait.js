@@ -81,13 +81,12 @@ export class Command {
 
   public stop(key: number): boolean {
     if (this.inputs.hasOwnProperty(key)) {
-      //pushed input is in the controls list
       this.inputs[key].up();
-    }
-    if (this.started) {
-      this.started = false;
-      this.callback(this.started);
-      return true;
+      if (this.started) {
+        this.started = false;
+        this.callback(this.started);
+        return true;
+      }
     }
     return false;
   }

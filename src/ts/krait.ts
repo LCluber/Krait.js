@@ -26,7 +26,6 @@ export class Keyboard {
   }
 
   public down(a: KeyboardEvent): void {
-    // let isCommandStarted = false;
     for (let command of this.commands) {
       command.start(a);
     }

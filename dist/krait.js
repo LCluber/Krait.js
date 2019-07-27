@@ -67,9 +67,15 @@ class Command {
         this.name = name;
         this.started = false;
         this.defaultControlKeys = {
-            ctrl: ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false,
-            alt: ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false,
-            shift: ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false
+            ctrl: ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl
+                ? true
+                : false,
+            alt: ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt
+                ? true
+                : false,
+            shift: ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift
+                ? true
+                : false
         };
         this.ctrlKeys = {};
         this.setInputs(ctrlKeys, asciiCodes);
@@ -105,22 +111,26 @@ class Command {
     stop(key) {
         if (this.inputs.hasOwnProperty(key)) {
             this.inputs[key].up();
-        }
-        if (this.started) {
-            this.started = false;
-            this.callback(this.started);
-            return true;
+            if (this.started) {
+                this.started = false;
+                this.callback(this.started);
+                return true;
+            }
         }
         return false;
     }
     setInputs(ctrlKeys, asciiCodes) {
         this.inputs = {};
         this.ctrlKeys.ctrl =
-            ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false;
+            ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl
+                ? true
+                : false;
         this.ctrlKeys.alt =
             ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false;
         this.ctrlKeys.shift =
-            ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false;
+            ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift
+                ? true
+                : false;
         for (let asciiCode of asciiCodes) {
             if (!this.inputs.hasOwnProperty("asciiCode")) {
                 this.inputs[asciiCode] = new Input(asciiCode);

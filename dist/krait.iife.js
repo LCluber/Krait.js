@@ -666,11 +666,11 @@ var Krait = (function (exports) {
       Command.prototype.stop = function (key) {
           if (this.inputs.hasOwnProperty(key)) {
               this.inputs[key].up();
-          }
-          if (this.started) {
-              this.started = false;
-              this.callback(this.started);
-              return true;
+              if (this.started) {
+                  this.started = false;
+                  this.callback(this.started);
+                  return true;
+              }
           }
           return false;
       };
