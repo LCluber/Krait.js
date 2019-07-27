@@ -1,3 +1,26 @@
+# [1.0.0](https://github.com/LCluber/Krait.js/compare/v0.3.0...v1.0.0) (2019-07-27)
+
+
+### Bug Fixes
+
+* **command:** better behavior of chained inputs ([93a772d](https://github.com/LCluber/Krait.js/commit/93a772d))
+
+
+### Code Refactoring
+
+* **addcommand:** control keys parameters now sent in an object ([dccbea9](https://github.com/LCluber/Krait.js/commit/dccbea9))
+
+
+### Features
+
+* **callback:** now returns false on key up ([ba5ac0d](https://github.com/LCluber/Krait.js/commit/ba5ac0d))
+* **keyboard:** added getcommandinputsascii method ([5bb6504](https://github.com/LCluber/Krait.js/commit/5bb6504))
+
+
+### BREAKING CHANGES
+
+* **addcommand:** control keys sent as object
+
 Version 0.3.0 (October 21th 2018)
 -----------------------------
  * Multiple keystroke detection
