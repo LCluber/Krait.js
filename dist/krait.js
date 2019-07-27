@@ -53,11 +53,11 @@ class Input {
         this.defaultASCII = ascii;
         this.pressed = false;
     }
-    Down(a) {
+    down(a) {
         a.preventDefault();
         this.pressed = true;
     }
-    Up() {
+    up() {
         this.pressed = false;
     }
 }
@@ -67,9 +67,9 @@ class Command {
         this.name = name;
         this.started = false;
         this.defaultControlKeys = {
-            ctrl: ctrlKeys.hasOwnProperty('ctrl') && ctrlKeys.ctrl ? true : false,
-            alt: ctrlKeys.hasOwnProperty('alt') && ctrlKeys.alt ? true : false,
-            shift: ctrlKeys.hasOwnProperty('shift') && ctrlKeys.shift ? true : false
+            ctrl: ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false,
+            alt: ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false,
+            shift: ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false
         };
         this.ctrlKeys = {};
         this.setInputs(ctrlKeys, asciiCodes);
@@ -82,27 +82,29 @@ class Command {
     }
     start(a) {
         if (this.inputs.hasOwnProperty(a.which)) {
-            this.inputs[a.which].Down(a);
-        }
-        for (let property in this.inputs) {
-            if (this.inputs.hasOwnProperty(property)) {
-                if (!this.inputs[property].pressed) {
-                    return false;
+            this.inputs[a.which].down(a);
+            if (this.inputsLength > 1) {
+                for (let property in this.inputs) {
+                    if (this.inputs.hasOwnProperty(property)) {
+                        if (!this.inputs[property].pressed) {
+                            return false;
+                        }
+                    }
                 }
             }
-        }
-        if (this.ctrlKeys.ctrl === a.ctrlKey &&
-            this.ctrlKeys.alt === a.altKey &&
-            this.ctrlKeys.shift === a.shiftKey) {
-            this.started = true;
-            this.callback(this.started);
-            return this.started;
+            if (this.ctrlKeys.ctrl === a.ctrlKey &&
+                this.ctrlKeys.alt === a.altKey &&
+                this.ctrlKeys.shift === a.shiftKey) {
+                this.started = true;
+                this.callback(this.started);
+                return this.started;
+            }
         }
         return false;
     }
     stop(key) {
         if (this.inputs.hasOwnProperty(key)) {
-            this.inputs[key].Up();
+            this.inputs[key].up();
         }
         if (this.started) {
             this.started = false;
@@ -113,9 +115,12 @@ class Command {
     }
     setInputs(ctrlKeys, asciiCodes) {
         this.inputs = {};
-        this.ctrlKeys.ctrl = ctrlKeys.hasOwnProperty('ctrl') && ctrlKeys.ctrl ? true : false;
-        this.ctrlKeys.alt = ctrlKeys.hasOwnProperty('alt') && ctrlKeys.alt ? true : false;
-        this.ctrlKeys.shift = ctrlKeys.hasOwnProperty('shift') && ctrlKeys.shift ? true : false;
+        this.ctrlKeys.ctrl =
+            ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl ? true : false;
+        this.ctrlKeys.alt =
+            ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false;
+        this.ctrlKeys.shift =
+            ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift ? true : false;
         for (let asciiCode of asciiCodes) {
             if (!this.inputs.hasOwnProperty("asciiCode")) {
                 this.inputs[asciiCode] = new Input(asciiCode);
@@ -124,12 +129,14 @@ class Command {
         this.inputsLength = asciiCodes.length;
     }
     default() {
+        this.inputsLength = 0;
         for (let property in this.inputs) {
             if (this.inputs.hasOwnProperty(property)) {
                 let oldInput = this.inputs[property];
                 if (+property !== oldInput.defaultASCII) {
                     this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
                     delete this.inputs[property];
+                    this.inputsLength++;
                     this.copyDefaultToCtrls();
                 }
             }
@@ -156,21 +163,13 @@ class Keyboard {
         };
     }
     down(a) {
-        let isCommandStarted = false;
         for (let command of this.commands) {
-            if (command.start(a) && !isCommandStarted) {
-                isCommandStarted = true;
-                this.log.info("Command " + command.name + " started");
-            }
+            command.start(a);
         }
     }
     up(a) {
-        let isCommandStopped = false;
         for (let command of this.commands) {
-            if (command.stop(a.which) && !isCommandStopped) {
-                isCommandStopped = true;
-                this.log.info("Command " + command.name + " stopped");
-            }
+            command.stop(a.which);
         }
     }
     addCommand(name, controls, keys, callback, scope) {
@@ -185,7 +184,7 @@ class Keyboard {
     setInputs(name, ctrlKeys, newKeys) {
         let asciiCodes = this.getAsciiCodes(newKeys);
         if (asciiCodes) {
-            let command = this.getCommandByName(name);
+            let command = this.getCommand(name);
             if (command) {
                 command.setInputs(ctrlKeys, asciiCodes);
                 this.log.info(command.name + " is now set to " + JSON.stringify(newKeys));
@@ -196,7 +195,7 @@ class Keyboard {
         return false;
     }
     default(name) {
-        let command = this.getCommandByName(name);
+        let command = this.getCommand(name);
         if (command) {
             command.default();
             this.commands = this.sortCommands(this.commands);
@@ -210,13 +209,20 @@ class Keyboard {
         });
         return commands;
     }
-    getCommandByName(name) {
+    getCommand(name) {
         for (let command of this.commands) {
             if (command.name == name) {
                 return command;
             }
         }
         return null;
+    }
+    getCommandInputsAscii(name) {
+        let command = this.getCommand(name);
+        if (command) {
+            return Object.keys(command.inputs);
+        }
+        return false;
     }
     getAsciiCodes(keys) {
         let asciiCodes = [];

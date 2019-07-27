@@ -7,12 +7,12 @@ export class Input {
     this.pressed = false;
   }
 
-  Down(a: KeyboardEvent): void {
+  down(a: KeyboardEvent): void {
     a.preventDefault();
     this.pressed = true;
   }
 
-  Up(): void {
+  up(): void {
     // if(this.listenUp)
     this.pressed = false;
   }

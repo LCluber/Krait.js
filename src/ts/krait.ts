@@ -26,22 +26,15 @@ export class Keyboard {
   }
 
   public down(a: KeyboardEvent): void {
-    let isCommandStarted = false;
+    // let isCommandStarted = false;
     for (let command of this.commands) {
-      if (command.start(a) && !isCommandStarted) {
-        isCommandStarted = true;
-        this.log.info("Command " + command.name + " started");
-      }
+      command.start(a);
     }
   }
 
   public up(a: KeyboardEvent): void {
-    let isCommandStopped = false;
     for (let command of this.commands) {
-      if (command.stop(a.which) && !isCommandStopped) {
-        isCommandStopped = true;
-        this.log.info("Command " + command.name + " stopped");
-      }
+      command.stop(a.which);
     }
   }
 
@@ -70,7 +63,7 @@ export class Keyboard {
   ): boolean {
     let asciiCodes = this.getAsciiCodes(newKeys);
     if (asciiCodes) {
-      let command = this.getCommandByName(name);
+      let command = this.getCommand(name);
       if (command) {
         command.setInputs(ctrlKeys, asciiCodes);
         this.log.info(
@@ -84,7 +77,7 @@ export class Keyboard {
   }
 
   public default(name: string): boolean {
-    let command = this.getCommandByName(name);
+    let command = this.getCommand(name);
     if (command) {
       command.default();
       this.commands = this.sortCommands(this.commands);
@@ -100,13 +93,21 @@ export class Keyboard {
     return commands;
   }
 
-  private getCommandByName(name: string): Command | null {
+  private getCommand(name: string): Command | null {
     for (let command of this.commands) {
       if (command.name == name) {
         return command;
       }
     }
     return null;
+  }
+
+  public getCommandInputsAscii(name: string): Array<string> | false {
+    let command = this.getCommand(name);
+    if (command) {
+      return Object.keys(command.inputs);
+    }
+    return false;
   }
 
   private getAsciiCodes(keys: Array<string | number>): number[] | false {

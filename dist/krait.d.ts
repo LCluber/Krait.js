@@ -22,15 +22,15 @@
 *
 * http://kraitjs.lcluber.com
 */
-import { Input } from "./input";
-import { CtrlKeys } from "./interfaces";
+
+
 export interface Inputs {
     [key: number]: Input;
 }
 export declare class Command {
     name: string;
     private callback;
-    private inputs;
+    inputs: Inputs;
     inputsLength: number;
     private started;
     private ctrlKeys;
@@ -39,7 +39,7 @@ export declare class Command {
     constructor(name: string, ctrlKeys: CtrlKeys, asciiCodes: Array<number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
-    setInputs(ctrlKeys: CtrlKeys, asciiCodes: Array<number>): void;
+    setInputs(ctrlKeys: CtrlKeys, asciiCodes: number[]): void;
     default(): void;
     private copyDefaultToCtrls;
 }
@@ -47,15 +47,15 @@ export declare class Input {
     defaultASCII: number;
     pressed: boolean;
     constructor(ascii: number);
-    Down(a: KeyboardEvent): void;
-    Up(): void;
+    down(a: KeyboardEvent): void;
+    up(): void;
 }
 export interface CtrlKeys {
     ctrl?: boolean;
     alt?: boolean;
     shift?: boolean;
 }
-import { CtrlKeys } from "./interfaces";
+
 export declare class Keyboard {
     private commands;
     private log;
@@ -67,7 +67,8 @@ export declare class Keyboard {
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
     private sortCommands;
-    private getCommandByName;
+    private getCommand;
+    getCommandInputsAscii(name: string): Array<string> | false;
     private getAsciiCodes;
     private inputValidation;
 }
