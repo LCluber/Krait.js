@@ -8,20 +8,22 @@ export class Keyboard {
   // map: Object;
   private commands: Command[];
   private log: Group;
+  private listen: boolean;
 
   constructor() {
     this.initListeners();
     this.commands = [];
     this.log = Logger.addGroup("Krait");
+    this.listen = false;
   }
 
   private initListeners(): void {
     //keyboard listeners
     document.onkeydown = (a: KeyboardEvent) => {
-      this.down(a);
+      this.listen && this.down(a);
     };
     document.onkeyup = (a: KeyboardEvent) => {
-      this.up(a);
+      this.listen && this.up(a);
     };
   }
 
@@ -37,9 +39,13 @@ export class Keyboard {
     }
   }
 
-  public start() {}
+  public start() {
+    this.listen = true;
+  }
 
-  public stop() {}
+  public stop() {
+    this.listen = false;
+  }
 
   public addCommand(
     name: string,

@@ -694,9 +694,9 @@ var Krait = (function (exports) {
           this.inputsLength = 0;
           for (var property in this.inputs) {
               if (this.inputs.hasOwnProperty(property)) {
-                  var oldInput = this.inputs[property];
-                  if (+property !== oldInput.defaultASCII) {
-                      this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
+                  var oldInputDefaultASCII = this.inputs[property].defaultASCII;
+                  if (+property !== oldInputDefaultASCII) {
+                      this.inputs[oldInputDefaultASCII] = new Input(oldInputDefaultASCII);
                       delete this.inputs[property];
                       this.inputsLength++;
                       this.copyDefaultToCtrls();
@@ -716,14 +716,15 @@ var Krait = (function (exports) {
           this.initListeners();
           this.commands = [];
           this.log = Logger.addGroup("Krait");
+          this.listen = false;
       }
       Keyboard.prototype.initListeners = function () {
           var _this = this;
           document.onkeydown = function (a) {
-              _this.down(a);
+              _this.listen && _this.down(a);
           };
           document.onkeyup = function (a) {
-              _this.up(a);
+              _this.listen && _this.up(a);
           };
       };
       Keyboard.prototype.down = function (a) {
@@ -737,6 +738,12 @@ var Krait = (function (exports) {
               var command = _a[_i];
               command.stop(a.which);
           }
+      };
+      Keyboard.prototype.start = function () {
+          this.listen = true;
+      };
+      Keyboard.prototype.stop = function () {
+          this.listen = false;
       };
       Keyboard.prototype.addCommand = function (name, controls, keys, callback, scope) {
           var asciiCodes = this.getAsciiCodes(keys);
@@ -786,10 +793,7 @@ var Krait = (function (exports) {
       };
       Keyboard.prototype.getCommandInputsAscii = function (name) {
           var command = this.getCommand(name);
-          if (command) {
-              return command.getInputsAscii();
-          }
-          return false;
+          return command ? command.getInputsAscii() : false;
       };
       Keyboard.prototype.getAsciiCodes = function (keys) {
           var asciiCodes = [];

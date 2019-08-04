@@ -34,6 +34,7 @@ keyboard.addCommand(
   action3,
   null
 );
+keyboard.start();
 
 function action0(isKeyDown) {
   if (isKeyDown) {

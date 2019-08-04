@@ -145,9 +145,9 @@ class Command {
         this.inputsLength = 0;
         for (let property in this.inputs) {
             if (this.inputs.hasOwnProperty(property)) {
-                let oldInput = this.inputs[property];
-                if (+property !== oldInput.defaultASCII) {
-                    this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
+                let oldInputDefaultASCII = this.inputs[property].defaultASCII;
+                if (+property !== oldInputDefaultASCII) {
+                    this.inputs[oldInputDefaultASCII] = new Input(oldInputDefaultASCII);
                     delete this.inputs[property];
                     this.inputsLength++;
                     this.copyDefaultToCtrls();
@@ -166,13 +166,14 @@ class Keyboard {
         this.initListeners();
         this.commands = [];
         this.log = Logger.addGroup("Krait");
+        this.listen = false;
     }
     initListeners() {
         document.onkeydown = (a) => {
-            this.down(a);
+            this.listen && this.down(a);
         };
         document.onkeyup = (a) => {
-            this.up(a);
+            this.listen && this.up(a);
         };
     }
     down(a) {
@@ -184,6 +185,12 @@ class Keyboard {
         for (let command of this.commands) {
             command.stop(a.which);
         }
+    }
+    start() {
+        this.listen = true;
+    }
+    stop() {
+        this.listen = false;
     }
     addCommand(name, controls, keys, callback, scope) {
         let asciiCodes = this.getAsciiCodes(keys);
@@ -232,10 +239,7 @@ class Keyboard {
     }
     getCommandInputsAscii(name) {
         let command = this.getCommand(name);
-        if (command) {
-            return command.getInputsAscii();
-        }
-        return false;
+        return command ? command.getInputsAscii() : false;
     }
     getAsciiCodes(keys) {
         let asciiCodes = [];

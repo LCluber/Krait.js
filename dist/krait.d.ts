@@ -60,10 +60,13 @@ export interface CtrlKeys {
 export declare class Keyboard {
     private commands;
     private log;
+    private listen;
     constructor();
     private initListeners;
     down(a: KeyboardEvent): void;
     up(a: KeyboardEvent): void;
+    start(): void;
+    stop(): void;
     addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): boolean;
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
