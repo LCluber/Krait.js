@@ -40,6 +40,7 @@ export declare class Command {
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
     setInputs(ctrlKeys: CtrlKeys, asciiCodes: number[]): void;
+    getInputsAscii(): string[];
     default(): void;
     private copyDefaultToCtrls;
 }

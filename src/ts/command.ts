@@ -111,13 +111,17 @@ export class Command {
     this.inputsLength = asciiCodes.length;
   }
 
+  public getInputsAscii() {
+    return Object.keys(this.inputs);
+  }
+
   public default(): void {
     this.inputsLength = 0;
     for (let property in this.inputs) {
       if (this.inputs.hasOwnProperty(property)) {
-        let oldInput = this.inputs[property];
-        if (+property !== oldInput.defaultASCII) {
-          this.inputs[oldInput.defaultASCII] = new Input(oldInput.defaultASCII);
+        let oldInputDefaultASCII = this.inputs[property].defaultASCII;
+        if (+property !== oldInputDefaultASCII) {
+          this.inputs[oldInputDefaultASCII] = new Input(oldInputDefaultASCII);
           delete this.inputs[property];
           this.inputsLength++;
           this.copyDefaultToCtrls();

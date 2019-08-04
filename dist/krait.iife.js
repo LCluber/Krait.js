@@ -687,6 +687,9 @@ var Krait = (function (exports) {
           }
           this.inputsLength = asciiCodes.length;
       };
+      Command.prototype.getInputsAscii = function () {
+          return Object.keys(this.inputs);
+      };
       Command.prototype.default = function () {
           this.inputsLength = 0;
           for (var property in this.inputs) {
@@ -784,7 +787,7 @@ var Krait = (function (exports) {
       Keyboard.prototype.getCommandInputsAscii = function (name) {
           var command = this.getCommand(name);
           if (command) {
-              return Object.keys(command.inputs);
+              return command.getInputsAscii();
           }
           return false;
       };

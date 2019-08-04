@@ -37,6 +37,10 @@ export class Keyboard {
     }
   }
 
+  public start() {}
+
+  public stop() {}
+
   public addCommand(
     name: string,
     controls: CtrlKeys,
@@ -103,10 +107,7 @@ export class Keyboard {
 
   public getCommandInputsAscii(name: string): Array<string> | false {
     let command = this.getCommand(name);
-    if (command) {
-      return Object.keys(command.inputs);
-    }
-    return false;
+    return command ? command.getInputsAscii() : false;
   }
 
   private getAsciiCodes(keys: Array<string | number>): number[] | false {

@@ -138,6 +138,9 @@ class Command {
         }
         this.inputsLength = asciiCodes.length;
     }
+    getInputsAscii() {
+        return Object.keys(this.inputs);
+    }
     default() {
         this.inputsLength = 0;
         for (let property in this.inputs) {
@@ -230,7 +233,7 @@ class Keyboard {
     getCommandInputsAscii(name) {
         let command = this.getCommand(name);
         if (command) {
-            return Object.keys(command.inputs);
+            return command.getInputsAscii();
         }
         return false;
     }

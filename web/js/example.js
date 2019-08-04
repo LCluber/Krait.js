@@ -35,26 +35,26 @@ keyboard.addCommand(
   null
 );
 
-function action0(down) {
-  if (down) {
+function action0(isKeyDown) {
+  if (isKeyDown) {
     animate(icon0);
   }
 }
 
-function action1(down) {
-  if (down) {
+function action1(isKeyDown) {
+  if (isKeyDown) {
     animate(icon1);
   }
 }
 
-function action2(down) {
-  if (down) {
+function action2(isKeyDown) {
+  if (isKeyDown) {
     animate(icon2);
   }
 }
 
-function action3(down) {
-  if (down) {
+function action3(isKeyDown) {
+  if (isKeyDown) {
     animate(icon3);
   }
 }
