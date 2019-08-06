@@ -36,13 +36,15 @@ export declare class Command {
     private ctrlKeys;
     private defaultControlKeys;
     private log;
-    constructor(name: string, ctrlKeys: CtrlKeys, asciiCodes: Array<number>, callback: Function, scope: any);
+    constructor(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
-    setInputs(ctrlKeys: CtrlKeys, asciiCodes: number[]): void;
+    setInputs(ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     getInputsAscii(): string[];
     default(): void;
     private copyDefaultToCtrls;
+    private getAsciiCodes;
+    private inputValidation;
 }
 export declare class Input {
     defaultASCII: number;
@@ -57,6 +59,7 @@ export interface CtrlKeys {
     shift?: boolean;
 }
 
+
 export declare class Keyboard {
     private commands;
     private log;
@@ -67,12 +70,10 @@ export declare class Keyboard {
     up(a: KeyboardEvent): void;
     start(): void;
     stop(): void;
-    addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): boolean;
+    addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
     private sortCommands;
     private getCommand;
     getCommandInputsAscii(name: string): Array<string> | false;
-    private getAsciiCodes;
-    private inputValidation;
 }

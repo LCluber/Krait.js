@@ -1,5 +1,3 @@
-import { String } from "@lcluber/weejs";
-import { isInteger, isAscii } from "@lcluber/chjs";
 import { Logger, Group } from "@lcluber/mouettejs";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
@@ -53,16 +51,11 @@ export class Keyboard {
     keys: Array<string | number>,
     callback: Function,
     scope: any
-  ): boolean {
-    let asciiCodes = this.getAsciiCodes(keys);
-    if (asciiCodes) {
-      this.commands.push(
-        new Command(name, controls, asciiCodes, callback, scope)
-      );
-      this.commands = this.sortCommands(this.commands);
-      return true;
-    }
-    return false;
+  ): Command {
+    let command = new Command(name, controls, keys, callback, scope);
+    this.commands.push(command);
+    this.commands = this.sortCommands(this.commands);
+    return command;
   }
 
   public setInputs(
@@ -70,17 +63,12 @@ export class Keyboard {
     ctrlKeys: CtrlKeys,
     newKeys: Array<string | number>
   ): boolean {
-    let asciiCodes = this.getAsciiCodes(newKeys);
-    if (asciiCodes) {
-      let command = this.getCommand(name);
-      if (command) {
-        command.setInputs(ctrlKeys, asciiCodes);
-        this.log.info(
-          command.name + " is now set to " + JSON.stringify(newKeys)
-        );
-        this.commands = this.sortCommands(this.commands);
-        return true;
-      }
+    let command = this.getCommand(name);
+    if (command) {
+      command.setInputs(ctrlKeys, newKeys);
+      this.log.info(command.name + " is now set to " + JSON.stringify(newKeys));
+      this.commands = this.sortCommands(this.commands);
+      return true;
     }
     return false;
   }
@@ -114,29 +102,5 @@ export class Keyboard {
   public getCommandInputsAscii(name: string): Array<string> | false {
     let command = this.getCommand(name);
     return command ? command.getInputsAscii() : false;
-  }
-
-  private getAsciiCodes(keys: Array<string | number>): number[] | false {
-    let asciiCodes = [];
-    for (let key of keys) {
-      let ascii: number | false = this.inputValidation(key);
-      if (!ascii) {
-        return false;
-      }
-      asciiCodes.push(ascii);
-    }
-    return asciiCodes;
-  }
-
-  private inputValidation(ascii: string | number): number | false {
-    if (!isInteger(ascii)) {
-      ascii = String.toASCII(<string>ascii);
-    }
-    if (isAscii(ascii, true)) {
-      //valid ascii code
-      return <number>ascii;
-    }
-    this.log.error(ascii + " is not assignable to a valid ASCII code");
-    return false;
   }
 }

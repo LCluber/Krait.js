@@ -1,3 +1,5 @@
+import { String } from "@lcluber/weejs";
+import { isInteger, isAscii } from "@lcluber/chjs";
 import { Input } from "./input";
 import { Logger, Group } from "@lcluber/mouettejs";
 import { CtrlKeys } from "./interfaces";
@@ -22,7 +24,7 @@ export class Command {
   constructor(
     name: string,
     ctrlKeys: CtrlKeys,
-    asciiCodes: Array<number>,
+    keys: Array<string | number>,
     callback: Function,
     scope: any
   ) {
@@ -43,12 +45,12 @@ export class Command {
           : false
     };
     this.ctrlKeys = {};
-    this.setInputs(ctrlKeys, asciiCodes);
+    this.log = Logger.addGroup("Krait");
+    this.setInputs(ctrlKeys, keys);
     this.callback = callback;
     if (scope) {
       this.callback = this.callback.bind(scope);
     }
-    this.log = Logger.addGroup("Krait");
     this.log.info("Added new command " + this.name);
   }
 
@@ -91,24 +93,35 @@ export class Command {
     return false;
   }
 
-  public setInputs(ctrlKeys: CtrlKeys, asciiCodes: number[]): void {
-    this.inputs = {};
-    this.ctrlKeys.ctrl =
-      ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl
-        ? true
-        : false;
-    this.ctrlKeys.alt =
-      ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt ? true : false;
-    this.ctrlKeys.shift =
-      ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift
-        ? true
-        : false;
-    for (let asciiCode of asciiCodes) {
-      if (!this.inputs.hasOwnProperty("asciiCode")) {
-        this.inputs[asciiCode] = new Input(asciiCode);
+  public setInputs(
+    ctrlKeys: CtrlKeys,
+    newKeys: Array<string | number>
+  ): boolean {
+    let asciiCodes = this.getAsciiCodes(newKeys);
+    if (asciiCodes) {
+      this.inputs = {};
+      this.ctrlKeys.ctrl =
+        ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl
+          ? true
+          : false;
+      this.ctrlKeys.alt =
+        ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt
+          ? true
+          : false;
+      this.ctrlKeys.shift =
+        ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift
+          ? true
+          : false;
+      for (let asciiCode of asciiCodes) {
+        if (!this.inputs.hasOwnProperty(asciiCode)) {
+          this.inputs[asciiCode] = new Input(asciiCode);
+        }
       }
+      this.inputsLength = asciiCodes.length;
+      this.log.info(this.name + " is now set to " + JSON.stringify(newKeys));
+      return true;
     }
-    this.inputsLength = asciiCodes.length;
+    return false;
   }
 
   public getInputsAscii() {
@@ -133,6 +146,30 @@ export class Command {
 
   private copyDefaultToCtrls(): void {
     this.ctrlKeys = JSON.parse(JSON.stringify(this.defaultControlKeys));
+  }
+
+  private getAsciiCodes(keys: Array<string | number>): number[] | false {
+    let asciiCodes = [];
+    for (let key of keys) {
+      let ascii: number | false = this.inputValidation(key);
+      if (!ascii) {
+        return false;
+      }
+      asciiCodes.push(ascii);
+    }
+    return asciiCodes;
+  }
+
+  private inputValidation(ascii: string | number): number | false {
+    if (!isInteger(ascii)) {
+      ascii = String.toASCII(<string>ascii);
+    }
+    if (isAscii(ascii, true)) {
+      //valid ascii code
+      return <number>ascii;
+    }
+    this.log.error(ascii + " is not assignable to a valid ASCII code");
+    return false;
   }
 
   // private setName(asciiCodes: Array<number>): string {
