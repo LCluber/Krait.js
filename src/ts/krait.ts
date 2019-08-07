@@ -85,7 +85,7 @@ export class Keyboard {
 
   private sortCommands(commands: Command[]): Command[] {
     commands.sort(function(a, b) {
-      return b.inputsLength - a.inputsLength;
+      return b.inputs.length - a.inputs.length;
     });
     return commands;
   }

@@ -24,17 +24,12 @@
 */
 
 
-export interface Inputs {
-    [key: number]: Input;
-}
 export declare class Command {
     name: string;
     private callback;
     inputs: Inputs;
-    inputsLength: number;
+    defaultInputs: Inputs;
     private started;
-    private ctrlKeys;
-    private defaultControlKeys;
     private log;
     constructor(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
@@ -42,21 +37,34 @@ export declare class Command {
     setInputs(ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     getInputsAscii(): string[];
     default(): void;
-    private copyDefaultToCtrls;
     private getAsciiCodes;
     private inputValidation;
 }
 export declare class Input {
-    defaultASCII: number;
     pressed: boolean;
-    constructor(ascii: number);
+    constructor();
     down(a: KeyboardEvent): void;
     up(): void;
 }
+
+export declare class Inputs {
+    length: number;
+    private keys;
+    private ctrlKeys;
+    constructor(ctrlKeys: CtrlKeys, asciiCodes: number[]);
+    start(a: KeyboardEvent): boolean;
+    stop(key: number): boolean;
+    set(ctrlKeys: CtrlKeys, asciiCodes: number[]): void;
+    getKeysAscii(): string[];
+}
+
 export interface CtrlKeys {
     ctrl?: boolean;
     alt?: boolean;
     shift?: boolean;
+}
+export interface Keys {
+    [key: number]: Input;
 }
 
 
