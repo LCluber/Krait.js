@@ -1,9 +1,7 @@
 export class Input {
-  // public defaultASCII: number; //first ascii code assigned will be kept here
   public pressed: boolean;
 
   constructor(/*ascii: number*/) {
-    // this.defaultASCII = ascii;
     this.pressed = false;
   }
 
@@ -13,7 +11,6 @@ export class Input {
   }
 
   up(): void {
-    // if(this.listenUp)
     this.pressed = false;
   }
 }

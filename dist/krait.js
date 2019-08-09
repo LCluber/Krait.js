@@ -23,31 +23,9 @@
 * http://kraitjs.lcluber.com
 */
 
-import { Logger } from '@lcluber/mouettejs';
 import { String } from '@lcluber/weejs';
-import { cloneDeep } from 'lodash-es';
-
-/* MIT License
-
-Copyright (c) 2009 Ludovic CLUBER
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice (including the next paragraph) shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-https://github.com/LCluber/Ch.js
-*/
-function isAscii(code, extended) {
-    if (isInteger(code)) {
-        return (extended && code >= 0 && code <= 255) || (code >= 0 && code <= 127);
-    }
-    return false;
-}
-function isInteger(number) {
-    return number === parseInt(number, 10);
-}
+import { isAscii, isInteger } from '@lcluber/chjs';
+import { Logger } from '@lcluber/mouettejs';
 
 class Input {
     constructor() {
@@ -66,7 +44,11 @@ class Inputs {
     constructor(ctrlKeys, asciiCodes) {
         this.length = 0;
         this.keys = {};
-        this.ctrlKeys = {};
+        this.ctrlKeys = {
+            ctrl: false,
+            alt: false,
+            shift: false
+        };
         this.set(ctrlKeys, asciiCodes);
     }
     start(a) {
@@ -98,22 +80,16 @@ class Inputs {
     }
     set(ctrlKeys, asciiCodes) {
         this.keys = {};
-        this.ctrlKeys.ctrl =
-            ctrlKeys && ctrlKeys.hasOwnProperty("ctrl") && ctrlKeys.ctrl
-                ? true
-                : false;
-        this.ctrlKeys.alt =
-            ctrlKeys && ctrlKeys.hasOwnProperty("alt") && ctrlKeys.alt
-                ? true
-                : false;
-        this.ctrlKeys.shift =
-            ctrlKeys && ctrlKeys.hasOwnProperty("shift") && ctrlKeys.shift
-                ? true
-                : false;
-        for (let asciiCode of asciiCodes) {
-            if (!this.keys.hasOwnProperty(asciiCode)) {
-                this.keys[asciiCode] = new Input();
+        for (let property in this.ctrlKeys) {
+            if (this.ctrlKeys.hasOwnProperty(property)) {
+                this.ctrlKeys[property] =
+                    ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property]
+                        ? true
+                        : false;
             }
+        }
+        for (let asciiCode of asciiCodes) {
+            this.keys[asciiCode] = new Input();
         }
         this.length = asciiCodes.length;
     }
@@ -129,15 +105,17 @@ class Command {
         let asciiCodes = this.getAsciiCodes(keys);
         if (asciiCodes) {
             this.inputs = new Inputs(ctrlKeys, asciiCodes);
-            this.defaultInputs = new Inputs(ctrlKeys, asciiCodes);
+            this.defaultInputs = {
+                ctrlKeys: ctrlKeys,
+                asciiCodes: asciiCodes
+            };
+            this.callback = callback;
+            if (scope) {
+                this.callback = this.callback.bind(scope);
+            }
+            this.log = Logger.addGroup("Krait");
+            this.log.info("Added new command " + this.name);
         }
-        this.callback = callback;
-        if (scope) {
-            this.callback = this.callback.bind(scope);
-        }
-        this.log = Logger.addGroup("Krait");
-        this.log.info("Added new command " + this.name);
-        console.log(this.inputs);
     }
     start(a) {
         if (this.inputs.start(a)) {
@@ -168,8 +146,8 @@ class Command {
         return this.inputs.getKeysAscii();
     }
     default() {
-        this.inputs = cloneDeep(this.defaultInputs);
-        this.log.info(this.name + " is now set to default");
+        this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
+        this.log.info(this.name + " is now set to default" + JSON.stringify(this.defaultInputs.asciiCodes));
     }
     getAsciiCodes(keys) {
         let asciiCodes = [];
@@ -198,7 +176,6 @@ class Keyboard {
     constructor() {
         this.initListeners();
         this.commands = [];
-        this.log = Logger.addGroup("Krait");
         this.listen = false;
     }
     initListeners() {
@@ -235,7 +212,6 @@ class Keyboard {
         let command = this.getCommand(name);
         if (command) {
             command.setInputs(ctrlKeys, newKeys);
-            this.log.info(command.name + " is now set to " + JSON.stringify(newKeys));
             this.commands = this.sortCommands(this.commands);
             return true;
         }

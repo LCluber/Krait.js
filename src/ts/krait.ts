@@ -1,17 +1,17 @@
-import { Logger, Group } from "@lcluber/mouettejs";
+// import { Logger, Group } from "@lcluber/mouettejs";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
 
 export class Keyboard {
   // map: Object;
   private commands: Command[];
-  private log: Group;
+  // private log: Group;
   private listen: boolean;
 
   constructor() {
     this.initListeners();
     this.commands = [];
-    this.log = Logger.addGroup("Krait");
+    // this.log = Logger.addGroup("Krait");
     this.listen = false;
   }
 
@@ -66,7 +66,6 @@ export class Keyboard {
     let command = this.getCommand(name);
     if (command) {
       command.setInputs(ctrlKeys, newKeys);
-      this.log.info(command.name + " is now set to " + JSON.stringify(newKeys));
       this.commands = this.sortCommands(this.commands);
       return true;
     }

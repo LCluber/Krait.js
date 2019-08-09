@@ -1,15 +1,14 @@
 import { String } from "@lcluber/weejs";
 import { isInteger, isAscii } from "@lcluber/chjs";
-import { cloneDeep } from "lodash-es";
-import { Inputs } from "./inputs";
 import { Logger, Group } from "@lcluber/mouettejs";
-import { CtrlKeys } from "./interfaces";
+import { Inputs } from "./inputs";
+import { CtrlKeys, DefaultInputs } from "./interfaces";
 
 export class Command {
   public name: string;
   private callback: Function;
   public inputs: Inputs;
-  public defaultInputs: Inputs;
+  public defaultInputs: DefaultInputs;
   private started: boolean;
   private log: Group;
 
@@ -25,15 +24,17 @@ export class Command {
     let asciiCodes = this.getAsciiCodes(keys);
     if (asciiCodes) {
       this.inputs = new Inputs(ctrlKeys, asciiCodes);
-      this.defaultInputs = new Inputs(ctrlKeys, asciiCodes);
+      this.defaultInputs = {
+        ctrlKeys: ctrlKeys,
+        asciiCodes: asciiCodes
+      };
+      this.callback = callback;
+      if (scope) {
+        this.callback = this.callback.bind(scope);
+      }
+      this.log = Logger.addGroup("Krait");
+      this.log.info("Added new command " + this.name);
     }
-    this.callback = callback;
-    if (scope) {
-      this.callback = this.callback.bind(scope);
-    }
-    this.log = Logger.addGroup("Krait");
-    this.log.info("Added new command " + this.name);
-    console.log(this.inputs);
   }
 
   public start(a: KeyboardEvent): boolean {
@@ -72,16 +73,13 @@ export class Command {
   }
 
   public default(): void {
-    // console.log(this.defaultInputs);
-    this.inputs = cloneDeep(this.defaultInputs);
-    //this.inputs = {...this.defaultInputs};
-    // console.log(this.inputs);
-    this.log.info(this.name + " is now set to default");
+    this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
+    this.log.info(
+      this.name +
+        " is now set to default" +
+        JSON.stringify(this.defaultInputs.asciiCodes)
+    );
   }
-
-  // private copyDefaultToCtrls(): void {
-  //   this.ctrlKeys = JSON.parse(JSON.stringify(this.defaultControlKeys));
-  // }
 
   private getAsciiCodes(keys: Array<string | number>): number[] | false {
     let asciiCodes = [];

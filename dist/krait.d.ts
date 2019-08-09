@@ -28,7 +28,7 @@ export declare class Command {
     name: string;
     private callback;
     inputs: Inputs;
-    defaultInputs: Inputs;
+    defaultInputs: DefaultInputs;
     private started;
     private log;
     constructor(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any);
@@ -62,6 +62,11 @@ export interface CtrlKeys {
     ctrl?: boolean;
     alt?: boolean;
     shift?: boolean;
+    [key: string]: boolean | undefined;
+}
+export interface DefaultInputs {
+    ctrlKeys: CtrlKeys;
+    asciiCodes: number[];
 }
 export interface Keys {
     [key: number]: Input;
@@ -70,7 +75,6 @@ export interface Keys {
 
 export declare class Keyboard {
     private commands;
-    private log;
     private listen;
     constructor();
     private initListeners;

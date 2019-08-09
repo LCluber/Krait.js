@@ -179,12 +179,7 @@ module.exports = function(grunt) {
               //   //exclude: './node_modules/**'
             })
           ],
-          external: [
-            "@lcluber/mouettejs",
-            "@lcluber/weejs",
-            "@lcluber/chjs",
-            "lodash-es"
-          ]
+          external: ["@lcluber/mouettejs", "@lcluber/weejs", "@lcluber/chjs"]
         },
         files: [
           {
