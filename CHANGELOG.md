@@ -1,3 +1,21 @@
+# [2.0.0](https://github.com/LCluber/Krait.js/compare/v1.0.0...v2.0.0) (2019-08-10)
+
+
+### Features
+
+* **command:** added getInputsAscii() method to command class ([c8afdd8](https://github.com/LCluber/Krait.js/commit/c8afdd8))
+* **command:** added setinputs() methods to command class ([a72794e](https://github.com/LCluber/Krait.js/commit/a72794e))
+* **groups:** commands can be grouped ([fc57b71](https://github.com/LCluber/Krait.js/commit/fc57b71))
+* **isascii:** extended parameter set to false by default ([34fc772](https://github.com/LCluber/Krait.js/commit/34fc772))
+* **keyboard:** added start() et stop() methods ([d82ddd7](https://github.com/LCluber/Krait.js/commit/d82ddd7))
+
+
+### BREAKING CHANGES
+
+* **groups:** have to give a group name when adding commands
+* **keyboard:** must call Keyboard.start() after Keyboard initilisation in order to start listening
+to key events
+
 # [1.0.0](https://github.com/LCluber/Krait.js/compare/v0.3.0...v1.0.0) (2019-07-27)
 
 
