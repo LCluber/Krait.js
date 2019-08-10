@@ -94,10 +94,10 @@ export class Command {
   }
 
   private inputValidation(ascii: string | number): number | false {
-    if (!isInteger(ascii)) {
+    if (!isInteger(ascii, false)) {
       ascii = String.toASCII(<string>ascii);
     }
-    if (isAscii(ascii, true)) {
+    if (isAscii(ascii)) {
       //valid ascii code
       return <number>ascii;
     }

@@ -147,7 +147,9 @@ class Command {
     }
     default() {
         this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
-        this.log.info(this.name + " is now set to default" + JSON.stringify(this.defaultInputs.asciiCodes));
+        this.log.info(this.name +
+            " is now set to default" +
+            JSON.stringify(this.defaultInputs.asciiCodes));
     }
     getAsciiCodes(keys) {
         let asciiCodes = [];
@@ -161,10 +163,10 @@ class Command {
         return asciiCodes;
     }
     inputValidation(ascii) {
-        if (!isInteger(ascii)) {
+        if (!isInteger(ascii, false)) {
             ascii = String.toASCII(ascii);
         }
-        if (isAscii(ascii, true)) {
+        if (isAscii(ascii)) {
             return ascii;
         }
         this.log.error(ascii + " is not assignable to a valid ASCII code");
@@ -172,28 +174,24 @@ class Command {
     }
 }
 
-class Keyboard {
-    constructor() {
-        this.initListeners();
+class Group {
+    constructor(name) {
+        this.name = name;
         this.commands = [];
         this.listen = false;
     }
-    initListeners() {
-        document.onkeydown = (a) => {
-            this.listen && this.down(a);
-        };
-        document.onkeyup = (a) => {
-            this.listen && this.up(a);
-        };
-    }
     down(a) {
-        for (let command of this.commands) {
-            command.start(a);
+        if (this.listen) {
+            for (let command of this.commands) {
+                command.start(a);
+            }
         }
     }
-    up(a) {
-        for (let command of this.commands) {
-            command.stop(a.which);
+    up(key) {
+        if (this.listen) {
+            for (let command of this.commands) {
+                command.stop(key);
+            }
         }
     }
     start() {
@@ -243,6 +241,84 @@ class Keyboard {
     getCommandInputsAscii(name) {
         let command = this.getCommand(name);
         return command ? command.getInputsAscii() : false;
+    }
+}
+
+class Keyboard {
+    constructor() {
+        this.initListeners();
+        this.groups = [];
+    }
+    initListeners() {
+        document.onkeydown = (a) => {
+            this.down(a);
+        };
+        document.onkeyup = (a) => {
+            this.up(a);
+        };
+    }
+    down(a) {
+        for (let group of this.groups) {
+            group.down(a);
+        }
+    }
+    up(a) {
+        for (let group of this.groups) {
+            group.up(a.which);
+        }
+    }
+    start(groupName) {
+        let group = this.getGroup(groupName);
+        if (group) {
+            group.start();
+            return true;
+        }
+        return false;
+    }
+    stop(groupName) {
+        let group = this.getGroup(groupName);
+        if (group) {
+            group.stop();
+            return true;
+        }
+        return false;
+    }
+    addCommand(groupName, commandName, ctrlKeys, keys, callback, scope) {
+        let group = this.getGroup(groupName);
+        if (!group) {
+            group = new Group(groupName);
+            this.groups.push(group);
+        }
+        return group.addCommand(commandName, ctrlKeys, keys, callback, scope);
+    }
+    setInputs(groupName, commandName, ctrlKeys, newKeys) {
+        let group = this.getGroup(groupName);
+        if (group) {
+            return group.setInputs(commandName, ctrlKeys, newKeys);
+        }
+        return false;
+    }
+    default(groupName, commandName) {
+        let group = this.getGroup(groupName);
+        if (group) {
+            return group.default(commandName);
+        }
+        return false;
+    }
+    getGroup(name) {
+        for (let group of this.groups) {
+            if (group.name == name) {
+                return group;
+            }
+        }
+        return null;
+    }
+    getCommandInputsAscii(groupName, commandName) {
+        let group = this.getGroup(groupName);
+        if (group) {
+            return group.getCommandInputsAscii(commandName);
+        }
+        return false;
     }
 }
 

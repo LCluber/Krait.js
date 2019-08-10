@@ -388,7 +388,10 @@ var Krait = (function (exports) {
   }();
 
   function isAscii(code, extended) {
-      if (isInteger(code)) {
+      if (extended === void 0) {
+          extended = true;
+      }
+      if (isInteger(code, false)) {
           return extended && code >= 0 && code <= 255 || code >= 0 && code <= 127;
       }
       return false;
@@ -747,10 +750,10 @@ var Krait = (function (exports) {
           return asciiCodes;
       };
       Command.prototype.inputValidation = function (ascii) {
-          if (!isInteger(ascii)) {
+          if (!isInteger(ascii, false)) {
               ascii = String.toASCII(ascii);
           }
-          if (isAscii(ascii, true)) {
+          if (isAscii(ascii)) {
               return ascii;
           }
           this.log.error(ascii + " is not assignable to a valid ASCII code");
@@ -759,46 +762,41 @@ var Krait = (function (exports) {
       return Command;
   }();
 
-  var Keyboard = function () {
-      function Keyboard() {
-          this.initListeners();
+  var Group$1 = function () {
+      function Group(name) {
+          this.name = name;
           this.commands = [];
           this.listen = false;
       }
-      Keyboard.prototype.initListeners = function () {
-          var _this = this;
-          document.onkeydown = function (a) {
-              _this.listen && _this.down(a);
-          };
-          document.onkeyup = function (a) {
-              _this.listen && _this.up(a);
-          };
-      };
-      Keyboard.prototype.down = function (a) {
-          for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
-              var command = _a[_i];
-              command.start(a);
+      Group.prototype.down = function (a) {
+          if (this.listen) {
+              for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
+                  var command = _a[_i];
+                  command.start(a);
+              }
           }
       };
-      Keyboard.prototype.up = function (a) {
-          for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
-              var command = _a[_i];
-              command.stop(a.which);
+      Group.prototype.up = function (key) {
+          if (this.listen) {
+              for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
+                  var command = _a[_i];
+                  command.stop(key);
+              }
           }
       };
-      Keyboard.prototype.start = function () {
+      Group.prototype.start = function () {
           this.listen = true;
       };
-      Keyboard.prototype.stop = function () {
+      Group.prototype.stop = function () {
           this.listen = false;
       };
-      Keyboard.prototype.addCommand = function (name, controls, keys, callback, scope) {
+      Group.prototype.addCommand = function (name, controls, keys, callback, scope) {
           var command = new Command(name, controls, keys, callback, scope);
           this.commands.push(command);
           this.commands = this.sortCommands(this.commands);
           return command;
       };
-      Keyboard.prototype.setInputs = function (name, ctrlKeys, newKeys) {
+      Group.prototype.setInputs = function (name, ctrlKeys, newKeys) {
           var command = this.getCommand(name);
           if (command) {
               command.setInputs(ctrlKeys, newKeys);
@@ -807,7 +805,7 @@ var Krait = (function (exports) {
           }
           return false;
       };
-      Keyboard.prototype.default = function (name) {
+      Group.prototype.default = function (name) {
           var command = this.getCommand(name);
           if (command) {
               command.default();
@@ -816,13 +814,13 @@ var Krait = (function (exports) {
           }
           return false;
       };
-      Keyboard.prototype.sortCommands = function (commands) {
+      Group.prototype.sortCommands = function (commands) {
           commands.sort(function (a, b) {
               return b.inputs.length - a.inputs.length;
           });
           return commands;
       };
-      Keyboard.prototype.getCommand = function (name) {
+      Group.prototype.getCommand = function (name) {
           for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
               var command = _a[_i];
               if (command.name == name) {
@@ -831,9 +829,92 @@ var Krait = (function (exports) {
           }
           return null;
       };
-      Keyboard.prototype.getCommandInputsAscii = function (name) {
+      Group.prototype.getCommandInputsAscii = function (name) {
           var command = this.getCommand(name);
           return command ? command.getInputsAscii() : false;
+      };
+      return Group;
+  }();
+
+  var Keyboard = function () {
+      function Keyboard() {
+          this.initListeners();
+          this.groups = [];
+      }
+      Keyboard.prototype.initListeners = function () {
+          var _this = this;
+          document.onkeydown = function (a) {
+              _this.down(a);
+          };
+          document.onkeyup = function (a) {
+              _this.up(a);
+          };
+      };
+      Keyboard.prototype.down = function (a) {
+          for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
+              var group = _a[_i];
+              group.down(a);
+          }
+      };
+      Keyboard.prototype.up = function (a) {
+          for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
+              var group = _a[_i];
+              group.up(a.which);
+          }
+      };
+      Keyboard.prototype.start = function (groupName) {
+          var group = this.getGroup(groupName);
+          if (group) {
+              group.start();
+              return true;
+          }
+          return false;
+      };
+      Keyboard.prototype.stop = function (groupName) {
+          var group = this.getGroup(groupName);
+          if (group) {
+              group.stop();
+              return true;
+          }
+          return false;
+      };
+      Keyboard.prototype.addCommand = function (groupName, commandName, ctrlKeys, keys, callback, scope) {
+          var group = this.getGroup(groupName);
+          if (!group) {
+              group = new Group$1(groupName);
+              this.groups.push(group);
+          }
+          return group.addCommand(commandName, ctrlKeys, keys, callback, scope);
+      };
+      Keyboard.prototype.setInputs = function (groupName, commandName, ctrlKeys, newKeys) {
+          var group = this.getGroup(groupName);
+          if (group) {
+              return group.setInputs(commandName, ctrlKeys, newKeys);
+          }
+          return false;
+      };
+      Keyboard.prototype.default = function (groupName, commandName) {
+          var group = this.getGroup(groupName);
+          if (group) {
+              return group.default(commandName);
+          }
+          return false;
+      };
+      Keyboard.prototype.getGroup = function (name) {
+          for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
+              var group = _a[_i];
+              if (group.name == name) {
+                  return group;
+              }
+          }
+          return null;
+      };
+      Keyboard.prototype.getCommandInputsAscii = function (groupName, commandName) {
+          var group = this.getGroup(groupName);
+          if (group) {
+              return group.getCommandInputsAscii(commandName);
+          }
+          return false;
       };
       return Keyboard;
   }();

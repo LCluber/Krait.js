@@ -51,7 +51,7 @@
     "dist/"
   ],
   "dependencies": {
-    "@lcluber/chjs": "2.4.0",
+    "@lcluber/chjs": "2.6.0",
     "@lcluber/mouettejs": "0.3.2",
     "@lcluber/weejs": "0.1.10",
     "body-parser": "1.16.1",

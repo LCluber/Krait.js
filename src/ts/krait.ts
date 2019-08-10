@@ -1,105 +1,114 @@
 // import { Logger, Group } from "@lcluber/mouettejs";
+import { Group } from "./group";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
 
 export class Keyboard {
   // map: Object;
-  private commands: Command[];
+  private groups: Group[];
   // private log: Group;
-  private listen: boolean;
+  // private listen: boolean;
 
   constructor() {
     this.initListeners();
-    this.commands = [];
+    this.groups = [];
     // this.log = Logger.addGroup("Krait");
-    this.listen = false;
   }
 
   private initListeners(): void {
     //keyboard listeners
     document.onkeydown = (a: KeyboardEvent) => {
-      this.listen && this.down(a);
+      this.down(a);
     };
     document.onkeyup = (a: KeyboardEvent) => {
-      this.listen && this.up(a);
+      this.up(a);
     };
   }
 
   public down(a: KeyboardEvent): void {
-    for (let command of this.commands) {
-      command.start(a);
+    for (let group of this.groups) {
+      group.down(a);
     }
   }
 
   public up(a: KeyboardEvent): void {
-    for (let command of this.commands) {
-      command.stop(a.which);
+    for (let group of this.groups) {
+      group.up(a.which);
     }
   }
 
-  public start() {
-    this.listen = true;
+  public start(groupName: string): boolean {
+    let group = this.getGroup(groupName);
+    if (group) {
+      group.start();
+      return true;
+    }
+    return false;
   }
 
-  public stop() {
-    this.listen = false;
+  public stop(groupName: string): boolean {
+    let group = this.getGroup(groupName);
+    if (group) {
+      group.stop();
+      return true;
+    }
+    return false;
   }
 
   public addCommand(
-    name: string,
-    controls: CtrlKeys,
+    groupName: string,
+    commandName: string,
+    ctrlKeys: CtrlKeys,
     keys: Array<string | number>,
     callback: Function,
     scope: any
   ): Command {
-    let command = new Command(name, controls, keys, callback, scope);
-    this.commands.push(command);
-    this.commands = this.sortCommands(this.commands);
-    return command;
+    let group = this.getGroup(groupName);
+    if (!group) {
+      group = new Group(groupName);
+      this.groups.push(group);
+    }
+    return group.addCommand(commandName, ctrlKeys, keys, callback, scope);
   }
 
   public setInputs(
-    name: string,
+    groupName: string,
+    commandName: string,
     ctrlKeys: CtrlKeys,
     newKeys: Array<string | number>
   ): boolean {
-    let command = this.getCommand(name);
-    if (command) {
-      command.setInputs(ctrlKeys, newKeys);
-      this.commands = this.sortCommands(this.commands);
-      return true;
+    let group = this.getGroup(groupName);
+    if (group) {
+      return group.setInputs(commandName, ctrlKeys, newKeys);
     }
     return false;
   }
 
-  public default(name: string): boolean {
-    let command = this.getCommand(name);
-    if (command) {
-      command.default();
-      this.commands = this.sortCommands(this.commands);
-      return true;
+  public default(groupName: string, commandName: string): boolean {
+    let group = this.getGroup(groupName);
+    if (group) {
+      return group.default(commandName);
     }
     return false;
   }
 
-  private sortCommands(commands: Command[]): Command[] {
-    commands.sort(function(a, b) {
-      return b.inputs.length - a.inputs.length;
-    });
-    return commands;
-  }
-
-  private getCommand(name: string): Command | null {
-    for (let command of this.commands) {
-      if (command.name == name) {
-        return command;
+  private getGroup(name: string): Group | null {
+    for (let group of this.groups) {
+      if (group.name == name) {
+        return group;
       }
     }
     return null;
   }
 
-  public getCommandInputsAscii(name: string): Array<string> | false {
-    let command = this.getCommand(name);
-    return command ? command.getInputsAscii() : false;
+  public getCommandInputsAscii(
+    groupName: string,
+    commandName: string
+  ): Array<string> | false {
+    let group = this.getGroup(groupName);
+    if (group) {
+      return group.getCommandInputsAscii(commandName);
+    }
+    return false;
   }
 }
