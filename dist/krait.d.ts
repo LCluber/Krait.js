@@ -55,7 +55,7 @@ export declare class Group {
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
     private sortCommands;
-    private getCommand;
+    getCommand(name: string): Command | null;
     getCommandInputsAscii(name: string): Array<string> | false;
 }
 export declare class Input {
@@ -91,6 +91,7 @@ export interface Keys {
 }
 
 
+
 export declare class Keyboard {
     private groups;
     constructor();
@@ -102,6 +103,7 @@ export declare class Keyboard {
     addCommand(groupName: string, commandName: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
     setInputs(groupName: string, commandName: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(groupName: string, commandName: string): boolean;
-    private getGroup;
+    getGroup(name: string): Group | null;
+    getCommand(groupName: string, commandName: string): Command | null;
     getCommandInputsAscii(groupName: string, commandName: string): Array<string> | false;
 }

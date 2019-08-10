@@ -293,17 +293,11 @@ class Keyboard {
     }
     setInputs(groupName, commandName, ctrlKeys, newKeys) {
         let group = this.getGroup(groupName);
-        if (group) {
-            return group.setInputs(commandName, ctrlKeys, newKeys);
-        }
-        return false;
+        return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
     }
     default(groupName, commandName) {
         let group = this.getGroup(groupName);
-        if (group) {
-            return group.default(commandName);
-        }
-        return false;
+        return group ? group.default(commandName) : false;
     }
     getGroup(name) {
         for (let group of this.groups) {
@@ -313,12 +307,13 @@ class Keyboard {
         }
         return null;
     }
-    getCommandInputsAscii(groupName, commandName) {
+    getCommand(groupName, commandName) {
         let group = this.getGroup(groupName);
-        if (group) {
-            return group.getCommandInputsAscii(commandName);
-        }
-        return false;
+        return group ? group.getCommand(commandName) : null;
+    }
+    getCommandInputsAscii(groupName, commandName) {
+        let command = this.getCommand(groupName, commandName);
+        return command ? command.getInputsAscii() : false;
     }
 }
 

@@ -888,17 +888,11 @@ var Krait = (function (exports) {
       };
       Keyboard.prototype.setInputs = function (groupName, commandName, ctrlKeys, newKeys) {
           var group = this.getGroup(groupName);
-          if (group) {
-              return group.setInputs(commandName, ctrlKeys, newKeys);
-          }
-          return false;
+          return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
       };
       Keyboard.prototype.default = function (groupName, commandName) {
           var group = this.getGroup(groupName);
-          if (group) {
-              return group.default(commandName);
-          }
-          return false;
+          return group ? group.default(commandName) : false;
       };
       Keyboard.prototype.getGroup = function (name) {
           for (var _i = 0, _a = this.groups; _i < _a.length; _i++) {
@@ -909,12 +903,13 @@ var Krait = (function (exports) {
           }
           return null;
       };
-      Keyboard.prototype.getCommandInputsAscii = function (groupName, commandName) {
+      Keyboard.prototype.getCommand = function (groupName, commandName) {
           var group = this.getGroup(groupName);
-          if (group) {
-              return group.getCommandInputsAscii(commandName);
-          }
-          return false;
+          return group ? group.getCommand(commandName) : null;
+      };
+      Keyboard.prototype.getCommandInputsAscii = function (groupName, commandName) {
+          var command = this.getCommand(groupName, commandName);
+          return command ? command.getInputsAscii() : false;
       };
       return Keyboard;
   }();

@@ -78,21 +78,15 @@ export class Keyboard {
     newKeys: Array<string | number>
   ): boolean {
     let group = this.getGroup(groupName);
-    if (group) {
-      return group.setInputs(commandName, ctrlKeys, newKeys);
-    }
-    return false;
+    return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
   }
 
   public default(groupName: string, commandName: string): boolean {
     let group = this.getGroup(groupName);
-    if (group) {
-      return group.default(commandName);
-    }
-    return false;
+    return group ? group.default(commandName) : false;
   }
 
-  private getGroup(name: string): Group | null {
+  public getGroup(name: string): Group | null {
     for (let group of this.groups) {
       if (group.name == name) {
         return group;
@@ -101,14 +95,16 @@ export class Keyboard {
     return null;
   }
 
+  public getCommand(groupName: string, commandName: string): Command | null {
+    let group = this.getGroup(groupName);
+    return group ? group.getCommand(commandName) : null;
+  }
+
   public getCommandInputsAscii(
     groupName: string,
     commandName: string
   ): Array<string> | false {
-    let group = this.getGroup(groupName);
-    if (group) {
-      return group.getCommandInputsAscii(commandName);
-    }
-    return false;
+    let command = this.getCommand(groupName, commandName);
+    return command ? command.getInputsAscii() : false;
   }
 }

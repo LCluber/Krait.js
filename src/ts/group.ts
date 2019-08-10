@@ -84,7 +84,7 @@ export class Group {
     return commands;
   }
 
-  private getCommand(name: string): Command | null {
+  public getCommand(name: string): Command | null {
     for (let command of this.commands) {
       if (command.name == name) {
         return command;
