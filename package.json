@@ -51,9 +51,9 @@
     "dist/"
   ],
   "dependencies": {
-    "@lcluber/chjs": "2.6.0",
-    "@lcluber/mouettejs": "0.3.2",
-    "@lcluber/weejs": "0.1.10",
+    "@lcluber/chjs": "2.6.2",
+    "@lcluber/mouettejs": "2.1.0",
+    "@lcluber/weejs": "0.3.2",
     "body-parser": "1.16.1",
     "cookie-parser": "1.4.3",
     "express": "4.14.1",

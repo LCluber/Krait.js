@@ -28,7 +28,7 @@ keyboard.setInputs(
   ["Z"]
 );
 keyboard.addCommand(
-  "group1",
+  "group2",
   "action2",
   { ctrl: false, alt: false, shift: false },
   ["E"],
@@ -44,6 +44,7 @@ keyboard.addCommand(
   null
 );
 keyboard.start("group1");
+keyboard.start("group2");
 console.log(keyboard);
 function action0(isKeyDown) {
   if (isKeyDown) {

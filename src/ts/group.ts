@@ -32,12 +32,13 @@ export class Group {
     }
   }
 
-  public start() {
-    this.listen = true;
+  public start(): true {
+    return (this.listen = true);
   }
 
-  public stop() {
+  public stop(): true {
     this.listen = false;
+    return true;
   }
 
   public addCommand(

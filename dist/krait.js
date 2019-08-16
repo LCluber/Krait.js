@@ -195,10 +195,11 @@ class Group {
         }
     }
     start() {
-        this.listen = true;
+        return this.listen = true;
     }
     stop() {
         this.listen = false;
+        return true;
     }
     addCommand(name, controls, keys, callback, scope) {
         let command = new Command(name, controls, keys, callback, scope);
@@ -269,19 +270,11 @@ class Keyboard {
     }
     start(groupName) {
         let group = this.getGroup(groupName);
-        if (group) {
-            group.start();
-            return true;
-        }
-        return false;
+        return group ? group.start() : false;
     }
     stop(groupName) {
         let group = this.getGroup(groupName);
-        if (group) {
-            group.stop();
-            return true;
-        }
-        return false;
+        return group ? group.stop() : false;
     }
     addCommand(groupName, commandName, ctrlKeys, keys, callback, scope) {
         let group = this.getGroup(groupName);

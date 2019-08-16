@@ -39,20 +39,12 @@ export class Keyboard {
 
   public start(groupName: string): boolean {
     let group = this.getGroup(groupName);
-    if (group) {
-      group.start();
-      return true;
-    }
-    return false;
+    return group ? group.start() : false;
   }
 
   public stop(groupName: string): boolean {
     let group = this.getGroup(groupName);
-    if (group) {
-      group.stop();
-      return true;
-    }
-    return false;
+    return group ? group.stop() : false;
   }
 
   public addCommand(

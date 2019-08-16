@@ -49,8 +49,8 @@ export declare class Group {
     constructor(name: string);
     down(a: KeyboardEvent): void;
     up(key: number): void;
-    start(): void;
-    stop(): void;
+    start(): true;
+    stop(): true;
     addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
