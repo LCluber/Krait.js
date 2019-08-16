@@ -1,3 +1,10 @@
+## [2.0.1](https://github.com/LCluber/Krait.js/compare/v2.0.0...v2.0.1) (2019-08-16)
+
+
+### Bug Fixes
+
+* **dependencies:** updated dependencies ([198e01c](https://github.com/LCluber/Krait.js/commit/198e01c))
+
 # [2.0.0](https://github.com/LCluber/Krait.js/compare/v1.0.0...v2.0.0) (2019-08-10)
 
 

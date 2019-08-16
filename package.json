@@ -1,6 +1,6 @@
 {
   "name": "@lcluber/kraitjs",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Key bindings library written in TypeScript with multiple keystroke detection.",
   "keywords": [
     "key binding"
