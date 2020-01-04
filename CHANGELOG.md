@@ -1,3 +1,10 @@
+## [2.0.2](https://github.com/LCluber/Krait.js/compare/v2.0.1...v2.0.2) (2020-01-04)
+
+
+### Bug Fixes
+
+* **dependency:** delete Weejs dependency ([a78dceb](https://github.com/LCluber/Krait.js/commit/a78dceb))
+
 ## [2.0.1](https://github.com/LCluber/Krait.js/compare/v2.0.0...v2.0.1) (2019-08-16)
 
 
