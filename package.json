@@ -26,6 +26,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "pretty": "prettier --check 'src/ts/*.ts' --write",
+    "test": "",
     "commit": "git-cz",
     "semantic-release": "semantic-release"
   },
