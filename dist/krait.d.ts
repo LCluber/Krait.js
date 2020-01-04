@@ -39,6 +39,7 @@ export declare class Command {
     default(): void;
     private getAsciiCodes;
     private inputValidation;
+    private toASCII;
 }
 
 

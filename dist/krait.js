@@ -23,7 +23,6 @@
 * http://kraitjs.lcluber.com
 */
 
-import { String } from '@lcluber/weejs';
 import { isAscii, isInteger } from '@lcluber/chjs';
 import { Logger } from '@lcluber/mouettejs';
 
@@ -164,13 +163,16 @@ class Command {
     }
     inputValidation(ascii) {
         if (!isInteger(ascii, false)) {
-            ascii = String.toASCII(ascii);
+            ascii = this.toASCII(ascii);
         }
         if (isAscii(ascii)) {
             return ascii;
         }
         this.log.error(ascii + " is not assignable to a valid ASCII code");
         return false;
+    }
+    toASCII(code) {
+        return code.charCodeAt(0);
     }
 }
 
@@ -195,7 +197,7 @@ class Group {
         }
     }
     start() {
-        return this.listen = true;
+        return (this.listen = true);
     }
     stop() {
         this.listen = false;

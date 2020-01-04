@@ -1,4 +1,3 @@
-import { String } from "@lcluber/weejs";
 import { isInteger, isAscii } from "@lcluber/chjs";
 import { Logger, Group } from "@lcluber/mouettejs";
 import { Inputs } from "./inputs";
@@ -95,7 +94,7 @@ export class Command {
 
   private inputValidation(ascii: string | number): number | false {
     if (!isInteger(ascii, false)) {
-      ascii = String.toASCII(<string>ascii);
+      ascii = this.toASCII(<string>ascii);
     }
     if (isAscii(ascii)) {
       //valid ascii code
@@ -103,6 +102,10 @@ export class Command {
     }
     this.log.error(ascii + " is not assignable to a valid ASCII code");
     return false;
+  }
+
+  private toASCII(code: string): number {
+    return code.charCodeAt(0);
   }
 
   // private setName(asciiCodes: Array<number>): string {
