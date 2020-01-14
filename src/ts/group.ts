@@ -1,4 +1,3 @@
-// import { Logger, Group } from "@lcluber/mouettejs";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
 
@@ -6,13 +5,11 @@ export class Group {
   // map: Object;
   public name: string;
   private commands: Command[];
-  // private log: Group;
   private listen: boolean;
 
   constructor(name: string) {
     this.name = name;
     this.commands = [];
-    // this.log = Logger.addGroup("Krait");
     this.listen = false;
   }
 
@@ -50,7 +47,7 @@ export class Group {
   ): Command {
     let command = new Command(name, controls, keys, callback, scope);
     this.commands.push(command);
-    this.commands = this.sortCommands(this.commands);
+    this.commands = Group.sortCommands(this.commands);
     return command;
   }
 
@@ -62,7 +59,7 @@ export class Group {
     let command = this.getCommand(name);
     if (command) {
       command.setInputs(ctrlKeys, newKeys);
-      this.commands = this.sortCommands(this.commands);
+      this.commands = Group.sortCommands(this.commands);
       return true;
     }
     return false;
@@ -72,17 +69,10 @@ export class Group {
     let command = this.getCommand(name);
     if (command) {
       command.default();
-      this.commands = this.sortCommands(this.commands);
+      this.commands = Group.sortCommands(this.commands);
       return true;
     }
     return false;
-  }
-
-  private sortCommands(commands: Command[]): Command[] {
-    commands.sort(function(a, b) {
-      return b.inputs.length - a.inputs.length;
-    });
-    return commands;
   }
 
   public getCommand(name: string): Command | null {
@@ -97,5 +87,12 @@ export class Group {
   public getCommandInputsAscii(name: string): Array<string> | false {
     let command = this.getCommand(name);
     return command ? command.getInputsAscii() : false;
+  }
+
+  private static sortCommands(commands: Command[]): Command[] {
+    commands.sort(function(a, b) {
+      return b.inputs.length - a.inputs.length;
+    });
+    return commands;
   }
 }

@@ -305,6 +305,7 @@ module.exports = function(grunt) {
           nodeDir + "@fortawesome/fontawesome-free/js/all.min.js",
           nodeDir + "bootstrap/dist/js/bootstrap.min.js",
           nodeDir + "@lcluber/weejs/dist/wee.iife.min.js",
+          nodeDir + "@lcluber/mouettejs/dist/mouette.iife.min.js",
           distDir + projectNameLC + ".iife.min.js",
           publicDir + "js/main.min.js"
         ],

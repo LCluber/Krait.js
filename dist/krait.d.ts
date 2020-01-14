@@ -30,16 +30,15 @@ export declare class Command {
     inputs: Inputs;
     defaultInputs: DefaultInputs;
     private started;
-    private log;
     constructor(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
     setInputs(ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     getInputsAscii(): string[];
     default(): void;
-    private getAsciiCodes;
-    private inputValidation;
-    private toASCII;
+    private static getAsciiCodes;
+    private static inputValidation;
+    private static toASCII;
 }
 
 
@@ -55,9 +54,9 @@ export declare class Group {
     addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
-    private sortCommands;
     getCommand(name: string): Command | null;
     getCommandInputsAscii(name: string): Array<string> | false;
+    private static sortCommands;
 }
 export declare class Input {
     pressed: boolean;

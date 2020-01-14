@@ -24,7 +24,6 @@
 */
 
 import { isAscii, isInteger } from '@lcluber/chjs';
-import { Logger } from '@lcluber/mouettejs';
 
 class Input {
     constructor() {
@@ -101,7 +100,7 @@ class Command {
     constructor(name, ctrlKeys, keys, callback, scope) {
         this.name = name;
         this.started = false;
-        let asciiCodes = this.getAsciiCodes(keys);
+        let asciiCodes = Command.getAsciiCodes(keys);
         if (asciiCodes) {
             this.inputs = new Inputs(ctrlKeys, asciiCodes);
             this.defaultInputs = {
@@ -112,8 +111,6 @@ class Command {
             if (scope) {
                 this.callback = this.callback.bind(scope);
             }
-            this.log = Logger.addGroup("Krait");
-            this.log.info("Added new command " + this.name);
         }
     }
     start(a) {
@@ -133,10 +130,9 @@ class Command {
         return false;
     }
     setInputs(ctrlKeys, newKeys) {
-        let asciiCodes = this.getAsciiCodes(newKeys);
+        let asciiCodes = Command.getAsciiCodes(newKeys);
         if (asciiCodes) {
             this.inputs.set(ctrlKeys, asciiCodes);
-            this.log.info(this.name + " is now set to " + JSON.stringify(asciiCodes));
             return true;
         }
         return false;
@@ -146,14 +142,11 @@ class Command {
     }
     default() {
         this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
-        this.log.info(this.name +
-            " is now set to default" +
-            JSON.stringify(this.defaultInputs.asciiCodes));
     }
-    getAsciiCodes(keys) {
+    static getAsciiCodes(keys) {
         let asciiCodes = [];
         for (let key of keys) {
-            let ascii = this.inputValidation(key);
+            let ascii = Command.inputValidation(key);
             if (!ascii) {
                 return false;
             }
@@ -161,17 +154,16 @@ class Command {
         }
         return asciiCodes;
     }
-    inputValidation(ascii) {
+    static inputValidation(ascii) {
         if (!isInteger(ascii, false)) {
-            ascii = this.toASCII(ascii);
+            ascii = Command.toASCII(ascii);
         }
         if (isAscii(ascii)) {
             return ascii;
         }
-        this.log.error(ascii + " is not assignable to a valid ASCII code");
         return false;
     }
-    toASCII(code) {
+    static toASCII(code) {
         return code.charCodeAt(0);
     }
 }
@@ -206,14 +198,14 @@ class Group {
     addCommand(name, controls, keys, callback, scope) {
         let command = new Command(name, controls, keys, callback, scope);
         this.commands.push(command);
-        this.commands = this.sortCommands(this.commands);
+        this.commands = Group.sortCommands(this.commands);
         return command;
     }
     setInputs(name, ctrlKeys, newKeys) {
         let command = this.getCommand(name);
         if (command) {
             command.setInputs(ctrlKeys, newKeys);
-            this.commands = this.sortCommands(this.commands);
+            this.commands = Group.sortCommands(this.commands);
             return true;
         }
         return false;
@@ -222,16 +214,10 @@ class Group {
         let command = this.getCommand(name);
         if (command) {
             command.default();
-            this.commands = this.sortCommands(this.commands);
+            this.commands = Group.sortCommands(this.commands);
             return true;
         }
         return false;
-    }
-    sortCommands(commands) {
-        commands.sort(function (a, b) {
-            return b.inputs.length - a.inputs.length;
-        });
-        return commands;
     }
     getCommand(name) {
         for (let command of this.commands) {
@@ -244,6 +230,12 @@ class Group {
     getCommandInputsAscii(name) {
         let command = this.getCommand(name);
         return command ? command.getInputsAscii() : false;
+    }
+    static sortCommands(commands) {
+        commands.sort(function (a, b) {
+            return b.inputs.length - a.inputs.length;
+        });
+        return commands;
     }
 }
 

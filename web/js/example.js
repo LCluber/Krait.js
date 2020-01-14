@@ -1,3 +1,5 @@
+// Mouette.Logger.setLevel("info");
+
 var icon0 = Wee.Dom.findById("skill0");
 var icon1 = Wee.Dom.findById("skill1");
 var icon2 = Wee.Dom.findById("skill2");

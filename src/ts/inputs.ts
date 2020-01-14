@@ -1,4 +1,3 @@
-// import { Logger, Group } from "@lcluber/mouettejs";
 import { CtrlKeys, Keys } from "./interfaces";
 import { Input } from "./input";
 
@@ -7,7 +6,6 @@ export class Inputs {
   public length: number;
   private keys: Keys;
   private ctrlKeys: CtrlKeys;
-  // private log: Group;
 
   constructor(ctrlKeys: CtrlKeys, asciiCodes: number[]) {
     this.length = 0;

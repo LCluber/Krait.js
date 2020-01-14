@@ -1,5 +1,5 @@
 import { isInteger, isAscii } from "@lcluber/chjs";
-import { Logger, Group } from "@lcluber/mouettejs";
+// import { Logger, Group } from "@lcluber/mouettejs";
 import { Inputs } from "./inputs";
 import { CtrlKeys, DefaultInputs } from "./interfaces";
 
@@ -9,7 +9,7 @@ export class Command {
   public inputs: Inputs;
   public defaultInputs: DefaultInputs;
   private started: boolean;
-  private log: Group;
+  // private static log: Group;
 
   constructor(
     name: string,
@@ -20,7 +20,7 @@ export class Command {
   ) {
     this.name = name;
     this.started = false;
-    let asciiCodes = this.getAsciiCodes(keys);
+    let asciiCodes = Command.getAsciiCodes(keys);
     if (asciiCodes) {
       this.inputs = new Inputs(ctrlKeys, asciiCodes);
       this.defaultInputs = {
@@ -31,8 +31,8 @@ export class Command {
       if (scope) {
         this.callback = this.callback.bind(scope);
       }
-      this.log = Logger.addGroup("Krait");
-      this.log.info("Added new command " + this.name);
+      // Command.log = Logger.addGroup("Krait");
+      // Command.log.info("Added new command " + this.name);
     }
   }
 
@@ -58,10 +58,10 @@ export class Command {
     ctrlKeys: CtrlKeys,
     newKeys: Array<string | number>
   ): boolean {
-    let asciiCodes = this.getAsciiCodes(newKeys);
+    let asciiCodes = Command.getAsciiCodes(newKeys);
     if (asciiCodes) {
       this.inputs.set(ctrlKeys, asciiCodes);
-      this.log.info(this.name + " is now set to " + JSON.stringify(asciiCodes));
+      // Command.log.info(this.name + " is now set to " + JSON.stringify(asciiCodes));
       return true;
     }
     return false;
@@ -73,17 +73,17 @@ export class Command {
 
   public default(): void {
     this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
-    this.log.info(
-      this.name +
-        " is now set to default" +
-        JSON.stringify(this.defaultInputs.asciiCodes)
-    );
+    // Command.log.info(
+    //   this.name +
+    //     " is now set to default" +
+    //     JSON.stringify(this.defaultInputs.asciiCodes)
+    // );
   }
 
-  private getAsciiCodes(keys: Array<string | number>): number[] | false {
+  private static getAsciiCodes(keys: Array<string | number>): number[] | false {
     let asciiCodes = [];
     for (let key of keys) {
-      let ascii: number | false = this.inputValidation(key);
+      let ascii: number | false = Command.inputValidation(key);
       if (!ascii) {
         return false;
       }
@@ -92,19 +92,19 @@ export class Command {
     return asciiCodes;
   }
 
-  private inputValidation(ascii: string | number): number | false {
+  private static inputValidation(ascii: string | number): number | false {
     if (!isInteger(ascii, false)) {
-      ascii = this.toASCII(<string>ascii);
+      ascii = Command.toASCII(<string>ascii);
     }
     if (isAscii(ascii)) {
       //valid ascii code
       return <number>ascii;
     }
-    this.log.error(ascii + " is not assignable to a valid ASCII code");
+    //this.log.error(ascii + " is not assignable to a valid ASCII code");
     return false;
   }
 
-  private toASCII(code: string): number {
+  private static toASCII(code: string): number {
     return code.charCodeAt(0);
   }
 

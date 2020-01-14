@@ -1,17 +1,23 @@
-// import { Logger, Group } from "@lcluber/mouettejs";
+// import { Logger, Group as LoggerGroup } from "@lcluber/mouettejs";
 import { Group } from "./group";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
 
+// declare global {
+//   interface Window { Mouette: Logger; }
+// }
+
 export class Keyboard {
   // map: Object;
   private groups: Group[];
-  // private log: Group;
+  // private log: LoggerGroup;
   // private listen: boolean;
 
   constructor() {
     this.initListeners();
     this.groups = [];
+    // window.Mouette = Logger;
+    // this.log = window.Mouette.addGroup("Krait");
     // this.log = Logger.addGroup("Krait");
   }
 
