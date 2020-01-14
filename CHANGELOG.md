@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/LCluber/Krait.js/compare/v2.0.2...v2.1.0) (2020-01-14)
+
+
+### Features
+
+* **logs:** delete Mouette.js dependency ([e4765d0](https://github.com/LCluber/Krait.js/commit/e4765d0))
+
 ## [2.0.2](https://github.com/LCluber/Krait.js/compare/v2.0.1...v2.0.2) (2020-01-04)
 
 
