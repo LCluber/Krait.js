@@ -8,10 +8,17 @@ The purpose of this library is to provide a simple and easy to use key binding d
 
 ## Installation
 
+### npm
+
 ```bash
 $ npm install @lcluber/kraitjs
 ```
-Or download it **[here](http://kraitjs.lcluber.com/#download)**.
+
+### Yarn
+
+```bash
+$ yarn add @lcluber/kraitjs
+```
 
 ## Demo
 
@@ -19,11 +26,135 @@ See a basic example **[here](http://kraitjs.lcluber.com/#example)**.
 
 ## Usage
 
-Learn how to use it **[here](http://kraitjs.lcluber.com/#source)**.
+### ES6
+
+```javascript
+import { Keyboard } from "@lcluber/kraitjs";
+
+let keyboard = new Keyboard();
+
+keyboard.addCommand(
+  "group1",
+  "action0",
+  { ctrl: true, alt: false, shift: false },
+  [65],
+  action0,
+  null
+);
+keyboard.addCommand(
+  "group1",
+  "action1",
+  { ctrl: false, alt: false, shift: false },
+  ["G"],
+  action1,
+  null
+);
+// set another key for action1
+keyboard.setInputs(
+  "group1",
+  "action1",
+  { ctrl: false, alt: false, shift: false },
+  ["Z"]
+);
+
+// Enable group1 commands
+keyboard.start("group1");
+
+function action0(isKeyDown) {
+  if (isKeyDown) {
+    // do something;
+  }
+}
+
+function action1(isKeyDown) {
+  if (isKeyDown) {
+    // do something;
+  }
+}
+```
+
+### IIFE
+
+```javascript
+var keyboard = new Krait.Keyboard();
+
+keyboard.addCommand(
+  "group1",
+  "action0",
+  { ctrl: true, alt: false, shift: false },
+  [65],
+  action0,
+  null
+);
+keyboard.addCommand(
+  "group1",
+  "action1",
+  { ctrl: false, alt: false, shift: false },
+  ["G"],
+  action1,
+  null
+);
+// set another key for action1
+keyboard.setInputs(
+  "group1",
+  "action1",
+  { ctrl: false, alt: false, shift: false },
+  ["Z"]
+);
+
+// Enable group1 commands
+keyboard.start("group1");
+
+function action0(isKeyDown) {
+  if (isKeyDown) {
+    // do something;
+  }
+}
+
+function action1(isKeyDown) {
+  if (isKeyDown) {
+    // do something;
+  }
+}
+```
 
 ## API Reference
 
-Read the documentation **[here](http://kraitjs.lcluber.com/doc/)**.
+```javascript
+interface CtrlKeys {
+  ctrl?: boolean;
+  alt?: boolean;
+  shift?: boolean;
+}
+
+addCommand(
+    name: string,
+    controls: CtrlKeys,
+    keys: Array<string | number>,
+    callback: Function,
+    scope: any
+  ): Command {}
+
+setInputs(
+    ctrlKeys: CtrlKeys,
+    newKeys: Array<string | number>
+  ): boolean {}
+
+start(a: KeyboardEvent): boolean {}
+
+stop(key: number): boolean {}
+
+default(): void {}
+
+down(a: KeyboardEvent): void {}
+
+up(key: number): void {}
+
+getCommand(name: string): Command | null {}
+
+getCommandInputsAscii(name: string): Array<string> | false {}
+
+```
 
 ## Tests
 
@@ -32,7 +163,7 @@ No tests to run yet
 ## Contributors
 
 There is still a lot of work to do on this project and I would be glad to get all the help you can provide.
-To contribute you can clone the project on **[GitHub](https://github.com/LCluber/Krait.js)** and see  **NOTICE.md** for detailed installation walkthrough of the project.
+To contribute you can clone the project on **[GitHub](https://github.com/LCluber/Krait.js)** and see **NOTICE.md** for detailed installation walkthrough of the project.
 
 ## License
 
