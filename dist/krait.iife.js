@@ -104,9 +104,6 @@ var Krait = (function (exports) {
             }
             this.length = asciiCodes.length;
         };
-        Inputs.prototype.getKeysAscii = function () {
-            return Object.keys(this.keys);
-        };
         return Inputs;
     }();
 
@@ -133,30 +130,30 @@ var Krait = (function (exports) {
     var Command = function () {
         function Command(name, ctrlKeys, keys, callback, options) {
             this.name = name;
-            this.started = false;
+            this.pressed = false;
             var asciiCodes = Command.getAsciiCodes(keys);
             if (asciiCodes) {
                 this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
-                var preventDefault = options && options.hasOwnProperty('preventDefault') && options.preventDefault ? true : false;
+                var preventDefault = options && options.hasOwnProperty("preventDefault") && options.preventDefault ? true : false;
                 this.inputs = new Inputs(this.defaultInputs.ctrlKeys, asciiCodes, preventDefault);
                 this.callback = callback;
-                if (options && options.hasOwnProperty('scope')) {
+                if (options && options.hasOwnProperty("scope")) {
                     this.callback = this.callback.bind(options.scope);
                 }
             }
         }
         Command.prototype.start = function (a) {
             if (this.inputs.start(a)) {
-                this.started = true;
-                this.callback(this.started);
-                return this.started;
+                this.pressed = true;
+                this.callback(this.pressed);
+                return this.pressed;
             }
             return false;
         };
         Command.prototype.stop = function (key) {
-            if (this.inputs.stop(key) && this.started) {
-                this.started = false;
-                this.callback(this.started);
+            if (this.inputs.stop(key) && this.pressed) {
+                this.pressed = false;
+                this.callback(this.pressed);
                 return true;
             }
             return false;
@@ -169,9 +166,6 @@ var Krait = (function (exports) {
                 return true;
             }
             return false;
-        };
-        Command.prototype.getInputsAscii = function () {
-            return this.inputs.getKeysAscii();
         };
         Command.prototype.default = function () {
             this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);
@@ -259,10 +253,6 @@ var Krait = (function (exports) {
             }
             return null;
         };
-        Group.prototype.getCommandInputs = function (name) {
-            var command = this.getCommand(name);
-            return command ? command.getInputsAscii() : false;
-        };
         Group.sortCommands = function (commands) {
             commands.sort(function (a, b) {
                 return b.inputs.length - a.inputs.length;
@@ -340,10 +330,6 @@ var Krait = (function (exports) {
         Keyboard.prototype.getCommand = function (groupName, commandName) {
             var group = this.getGroup(groupName);
             return group ? group.getCommand(commandName) : null;
-        };
-        Keyboard.prototype.getCommandInputsAscii = function (groupName, commandName) {
-            var command = this.getCommand(groupName, commandName);
-            return command ? command.getInputsAscii() : false;
         };
         return Keyboard;
     }();

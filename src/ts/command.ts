@@ -8,7 +8,7 @@ export class Command {
   private callback: Function;
   public inputs: Inputs;
   public defaultInputs: DefaultInputs;
-  private started: boolean;
+  private pressed: boolean;
   // private options: Options;
   // private static log: Group;
 
@@ -20,7 +20,7 @@ export class Command {
     options: Options | null
   ) {
     this.name = name;
-    this.started = false;
+    this.pressed = false;
     let asciiCodes = Command.getAsciiCodes(keys);
     if (asciiCodes) {
       this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
@@ -46,17 +46,17 @@ export class Command {
 
   public start(a: KeyboardEvent): boolean {
     if (this.inputs.start(a)) {
-      this.started = true;
-      this.callback(this.started);
-      return this.started;
+      this.pressed = true;
+      this.callback(this.pressed);
+      return this.pressed;
     }
     return false;
   }
 
   public stop(key: number): boolean {
-    if (this.inputs.stop(key) && this.started) {
-      this.started = false;
-      this.callback(this.started);
+    if (this.inputs.stop(key) && this.pressed) {
+      this.pressed = false;
+      this.callback(this.pressed);
       return true;
     }
     return false;
@@ -72,9 +72,9 @@ export class Command {
     return false;
   }
 
-  public getInputsAscii(): string[] {
-    return this.inputs.getKeysAscii();
-  }
+  // public getInputsAscii(): string[] {
+  //   return this.inputs.getKeysAscii();
+  // }
 
   public default(): void {
     this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);

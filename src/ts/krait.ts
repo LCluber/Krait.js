@@ -93,11 +93,11 @@ export class Keyboard {
     return group ? group.getCommand(commandName) : null;
   }
 
-  public getCommandInputsAscii(
-    groupName: string,
-    commandName: string
-  ): Array<string> | false {
-    let command = this.getCommand(groupName, commandName);
-    return command ? command.getInputsAscii() : false;
-  }
+  // public getCommandInputsAscii(
+  //   groupName: string,
+  //   commandName: string
+  // ): Array<string> | false {
+  //   let command = this.getCommand(groupName, commandName);
+  //   return command ? command.getInputsAscii() : false;
+  // }
 }

@@ -75,10 +75,10 @@ export class Group {
     return null;
   }
 
-  public getCommandInputs(name: string): string[] | false {
-    let command = this.getCommand(name);
-    return command ? command.getInputsAscii() : false;
-  }
+  // public getCommandInputs(name: string): string[] | false {
+  //   let command = this.getCommand(name);
+  //   return command ? command.getInputsAscii() : false;
+  // }
 
   private static sortCommands(commands: Command[]): Command[] {
     commands.sort(function(a, b) {

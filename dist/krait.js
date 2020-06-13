@@ -88,9 +88,6 @@ class Inputs {
         }
         this.length = asciiCodes.length;
     }
-    getKeysAscii() {
-        return Object.keys(this.keys);
-    }
 }
 
 class DefaultInputs {
@@ -107,7 +104,9 @@ class DefaultInputs {
         for (let property in this.ctrlKeys) {
             if (this.ctrlKeys.hasOwnProperty(property)) {
                 this.ctrlKeys[property] =
-                    ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property] ? true : false;
+                    ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property]
+                        ? true
+                        : false;
             }
         }
     }
@@ -116,32 +115,34 @@ class DefaultInputs {
 class Command {
     constructor(name, ctrlKeys, keys, callback, options) {
         this.name = name;
-        this.started = false;
+        this.pressed = false;
         let asciiCodes = Command.getAsciiCodes(keys);
         if (asciiCodes) {
             this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
-            let preventDefault = (options &&
-                options.hasOwnProperty('preventDefault') &&
-                options.preventDefault) ? true : false;
+            let preventDefault = options &&
+                options.hasOwnProperty("preventDefault") &&
+                options.preventDefault
+                ? true
+                : false;
             this.inputs = new Inputs(this.defaultInputs.ctrlKeys, asciiCodes, preventDefault);
             this.callback = callback;
-            if (options && options.hasOwnProperty('scope')) {
+            if (options && options.hasOwnProperty("scope")) {
                 this.callback = this.callback.bind(options.scope);
             }
         }
     }
     start(a) {
         if (this.inputs.start(a)) {
-            this.started = true;
-            this.callback(this.started);
-            return this.started;
+            this.pressed = true;
+            this.callback(this.pressed);
+            return this.pressed;
         }
         return false;
     }
     stop(key) {
-        if (this.inputs.stop(key) && this.started) {
-            this.started = false;
-            this.callback(this.started);
+        if (this.inputs.stop(key) && this.pressed) {
+            this.pressed = false;
+            this.callback(this.pressed);
             return true;
         }
         return false;
@@ -154,9 +155,6 @@ class Command {
             return true;
         }
         return false;
-    }
-    getInputsAscii() {
-        return this.inputs.getKeysAscii();
     }
     default() {
         this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);
@@ -239,10 +237,6 @@ class Group {
         }
         return null;
     }
-    getCommandInputs(name) {
-        let command = this.getCommand(name);
-        return command ? command.getInputsAscii() : false;
-    }
     static sortCommands(commands) {
         commands.sort(function (a, b) {
             return b.inputs.length - a.inputs.length;
@@ -277,14 +271,14 @@ class Keyboard {
     watch(groupName) {
         let group = this.getGroup(groupName);
         if (group) {
-            return group.watch = true;
+            return (group.watch = true);
         }
         return false;
     }
     ignore(groupName) {
         let group = this.getGroup(groupName);
         if (group) {
-            return group.watch = false;
+            return (group.watch = false);
         }
         return true;
     }
@@ -315,10 +309,6 @@ class Keyboard {
     getCommand(groupName, commandName) {
         let group = this.getGroup(groupName);
         return group ? group.getCommand(commandName) : null;
-    }
-    getCommandInputsAscii(groupName, commandName) {
-        let command = this.getCommand(groupName, commandName);
-        return command ? command.getInputsAscii() : false;
     }
 }
 

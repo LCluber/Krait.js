@@ -38,11 +38,11 @@ keyboard.setInputs(
   "group1",
   "action1",
   { ctrl: false, alt: false, shift: false },
-  ["Z"]
+  ["Z", "T"]
 );
 
 // Enable group1 commands
-keyboard.startListening("group1");
+keyboard.watch("group1");
 
 function action0(isKeyDown) {
   if (isKeyDown) {
@@ -71,11 +71,11 @@ keyboard.setInputs(
   "group1",
   "action1",
   { ctrl: false, alt: false, shift: false },
-  ["Z"]
+  ["Z", "T"]
 );
 
 // Enable group1 commands
-keyboard.start("group1");
+keyboard.watch("group1");
 
 function action0(isKeyDown) {
   if (isKeyDown) {
@@ -117,15 +117,12 @@ setInputs(
     keys: Array<string | number>
   ): boolean {}
 
-watch(groupName: string): boolean {}
+watch(groupName: string): boolean {} //start watching a group of commands
+ignore(groupName: string): boolean {} //stop watching a group of commands
 
-ignore(groupName: string): boolean {}
+default(groupName: string, commandName: string): boolean {} //set command to default settings
 
-default(groupName: string, commandName: string): boolean {}
-
-getCommand(name: string): Command | null {}
-
-getCommandInputs(name: string): string[] | false {}
+getCommand(groupName: string, commandName: string): Command | null {}
 
 ```
 

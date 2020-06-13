@@ -68,7 +68,7 @@ export class Inputs {
     this.length = asciiCodes.length;
   }
 
-  public getKeysAscii(): string[] {
-    return Object.keys(this.keys);
-  }
+  // public getKeysAscii(): string[] {
+  //   return Object.keys(this.keys);
+  // }
 }
