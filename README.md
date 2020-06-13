@@ -40,7 +40,6 @@ keyboard.setInputs(
   { ctrl: false, alt: false, shift: false },
   ["Z", "T"]
 );
-
 // Enable group1 commands
 keyboard.watch("group1");
 
@@ -73,7 +72,6 @@ keyboard.setInputs(
   { ctrl: false, alt: false, shift: false },
   ["Z", "T"]
 );
-
 // Enable group1 commands
 keyboard.watch("group1");
 
