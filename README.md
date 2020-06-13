@@ -97,7 +97,7 @@ interface CtrlKeys {
   shift?: boolean;
 }
 
-export interface Options {
+interface Options {
   preventDefault?: boolean;
   scope?: this;
 }
