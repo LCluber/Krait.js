@@ -211,10 +211,10 @@ class Group {
         this.commands = Group.sortCommands(this.commands);
         return command;
     }
-    setInputs(name, ctrlKeys, newKeys) {
+    setInputs(name, ctrlKeys, keys) {
         let command = this.getCommand(name);
         if (command) {
-            command.setInputs(ctrlKeys, newKeys);
+            command.setInputs(ctrlKeys, keys);
             this.commands = Group.sortCommands(this.commands);
             return true;
         }

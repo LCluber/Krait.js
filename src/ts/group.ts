@@ -45,11 +45,11 @@ export class Group {
   public setInputs(
     name: string,
     ctrlKeys: CtrlKeys,
-    newKeys: Array<string | number>
+    keys: Array<string | number>
   ): boolean {
     let command = this.getCommand(name);
     if (command) {
-      command.setInputs(ctrlKeys, newKeys);
+      command.setInputs(ctrlKeys, keys);
       this.commands = Group.sortCommands(this.commands);
       return true;
     }

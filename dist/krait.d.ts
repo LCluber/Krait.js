@@ -57,7 +57,7 @@ export declare class Group {
     down(a: KeyboardEvent): void;
     up(key: number): void;
     addCommand(name: string, ctrlKeys: CtrlKeys | null, keys: Array<string | number>, callback: Function, options: Options | null): Command;
-    setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
+    setInputs(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>): boolean;
     default(name: string): boolean;
     getCommand(name: string): Command | null;
     private static sortCommands;

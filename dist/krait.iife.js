@@ -226,10 +226,10 @@ var Krait = (function (exports) {
             this.commands = Group.sortCommands(this.commands);
             return command;
         };
-        Group.prototype.setInputs = function (name, ctrlKeys, newKeys) {
+        Group.prototype.setInputs = function (name, ctrlKeys, keys) {
             var command = this.getCommand(name);
             if (command) {
-                command.setInputs(ctrlKeys, newKeys);
+                command.setInputs(ctrlKeys, keys);
                 this.commands = Group.sortCommands(this.commands);
                 return true;
             }

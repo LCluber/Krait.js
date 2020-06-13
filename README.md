@@ -118,6 +118,7 @@ setInputs(
   ): boolean {}
 
 watch(groupName: string): boolean {} //start watching a group of commands
+
 ignore(groupName: string): boolean {} //stop watching a group of commands
 
 default(groupName: string, commandName: string): boolean {} //set command to default settings
@@ -125,15 +126,6 @@ default(groupName: string, commandName: string): boolean {} //set command to def
 getCommand(groupName: string, commandName: string): Command | null {}
 
 ```
-
-## Tests
-
-No tests to run yet
-
-## Contributors
-
-There is still a lot of work to do on this project and I would be glad to get all the help you can provide.
-To contribute you can clone the project on **[GitHub](https://github.com/LCluber/Krait.js)** and see **NOTICE.md** for detailed installation walkthrough of the project.
 
 ## License
 
