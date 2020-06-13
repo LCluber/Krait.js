@@ -7,22 +7,10 @@ var icon3 = Wee.Dom.findById("skill3");
 
 var keyboard = new Krait.Keyboard();
 
-keyboard.addCommand(
-  "group1",
-  "action0",
-  { ctrl: true, alt: false, shift: false },
-  [65],
-  action0,
-  null
-);
-keyboard.addCommand(
-  "group1",
-  "action1",
-  { ctrl: false, alt: false, shift: false },
-  ["G"],
-  action1,
-  null
-);
+keyboard.addCommand("group1", "action0", { ctrl: true }, [65], action0, {
+  preventDefault: true
+});
+keyboard.addCommand("group1", "action1", null, ["G"], action1, null);
 keyboard.setInputs(
   "group1",
   "action1",
@@ -45,9 +33,9 @@ keyboard.addCommand(
   action3,
   null
 );
-keyboard.start("group1");
-keyboard.start("group2");
-console.log(keyboard);
+keyboard.watch("group1");
+keyboard.watch("group2");
+
 function action0(isKeyDown) {
   if (isKeyDown) {
     animate(icon0);

@@ -1,7 +1,7 @@
 import { isInteger, isAscii } from "@lcluber/chjs";
-// import { Logger, Group } from "@lcluber/mouettejs";
 import { Inputs } from "./inputs";
-import { CtrlKeys, DefaultInputs } from "./interfaces";
+import { DefaultInputs } from "./defaultInputs";
+import { CtrlKeys, Options } from "./interfaces";
 
 export class Command {
   public name: string;
@@ -9,27 +9,35 @@ export class Command {
   public inputs: Inputs;
   public defaultInputs: DefaultInputs;
   private started: boolean;
+  // private options: Options;
   // private static log: Group;
 
   constructor(
     name: string,
-    ctrlKeys: CtrlKeys,
+    ctrlKeys: CtrlKeys | null,
     keys: Array<string | number>,
     callback: Function,
-    scope: any
+    options: Options | null
   ) {
     this.name = name;
     this.started = false;
     let asciiCodes = Command.getAsciiCodes(keys);
     if (asciiCodes) {
-      this.inputs = new Inputs(ctrlKeys, asciiCodes);
-      this.defaultInputs = {
-        ctrlKeys: ctrlKeys,
-        asciiCodes: asciiCodes
-      };
+      this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
+      let preventDefault =
+        options &&
+        options.hasOwnProperty("preventDefault") &&
+        options.preventDefault
+          ? true
+          : false;
+      this.inputs = new Inputs(
+        this.defaultInputs.ctrlKeys,
+        asciiCodes,
+        preventDefault
+      );
       this.callback = callback;
-      if (scope) {
-        this.callback = this.callback.bind(scope);
+      if (options && options.hasOwnProperty("scope")) {
+        this.callback = this.callback.bind(options.scope);
       }
       // Command.log = Logger.addGroup("Krait");
       // Command.log.info("Added new command " + this.name);
@@ -54,30 +62,23 @@ export class Command {
     return false;
   }
 
-  public setInputs(
-    ctrlKeys: CtrlKeys,
-    newKeys: Array<string | number>
-  ): boolean {
-    let asciiCodes = Command.getAsciiCodes(newKeys);
+  public setInputs(ctrlKeys: CtrlKeys, keys: Array<string | number>): boolean {
+    let asciiCodes = Command.getAsciiCodes(keys);
     if (asciiCodes) {
-      this.inputs.set(ctrlKeys, asciiCodes);
-      // Command.log.info(this.name + " is now set to " + JSON.stringify(asciiCodes));
+      this.inputs.setCtrlKeys(ctrlKeys);
+      this.inputs.setKeys(asciiCodes);
       return true;
     }
     return false;
   }
 
-  public getInputsAscii() {
+  public getInputsAscii(): string[] {
     return this.inputs.getKeysAscii();
   }
 
   public default(): void {
-    this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
-    // Command.log.info(
-    //   this.name +
-    //     " is now set to default" +
-    //     JSON.stringify(this.defaultInputs.asciiCodes)
-    // );
+    this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);
+    this.inputs.setKeys(this.defaultInputs.asciiCodes);
   }
 
   private static getAsciiCodes(keys: Array<string | number>): number[] | false {
@@ -100,7 +101,6 @@ export class Command {
       //valid ascii code
       return <number>ascii;
     }
-    //this.log.error(ascii + " is not assignable to a valid ASCII code");
     return false;
   }
 

@@ -45,8 +45,10 @@ var Krait = (function (exports) {
         function Input() {
             this.pressed = false;
         }
-        Input.prototype.down = function (a) {
-            a.preventDefault();
+        Input.prototype.down = function (a, preventDefault) {
+            if (preventDefault) {
+                a.preventDefault();
+            }
             this.pressed = true;
         };
         Input.prototype.up = function () {
@@ -56,19 +58,16 @@ var Krait = (function (exports) {
     }();
 
     var Inputs = function () {
-        function Inputs(ctrlKeys, asciiCodes) {
+        function Inputs(ctrlKeys, asciiCodes, preventDefault) {
             this.length = 0;
             this.keys = {};
-            this.ctrlKeys = {
-                ctrl: false,
-                alt: false,
-                shift: false
-            };
-            this.set(ctrlKeys, asciiCodes);
+            this.setCtrlKeys(ctrlKeys);
+            this.setKeys(asciiCodes);
+            this.preventDefault = preventDefault;
         }
         Inputs.prototype.start = function (a) {
             if (this.keys.hasOwnProperty(a.which)) {
-                this.keys[a.which].down(a);
+                this.keys[a.which].down(a, this.preventDefault);
                 if (this.length > 1) {
                     for (var property in this.keys) {
                         if (this.keys.hasOwnProperty(property)) {
@@ -91,13 +90,14 @@ var Krait = (function (exports) {
             }
             return false;
         };
-        Inputs.prototype.set = function (ctrlKeys, asciiCodes) {
-            this.keys = {};
-            for (var property in this.ctrlKeys) {
-                if (this.ctrlKeys.hasOwnProperty(property)) {
-                    this.ctrlKeys[property] = ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property] ? true : false;
-                }
-            }
+        Inputs.prototype.setCtrlKeys = function (ctrlKeys) {
+            this.ctrlKeys = {
+                ctrl: ctrlKeys.ctrl,
+                alt: ctrlKeys.alt,
+                shift: ctrlKeys.shift
+            };
+        };
+        Inputs.prototype.setKeys = function (asciiCodes) {
             for (var _i = 0, asciiCodes_1 = asciiCodes; _i < asciiCodes_1.length; _i++) {
                 var asciiCode = asciiCodes_1[_i];
                 this.keys[asciiCode] = new Input();
@@ -110,20 +110,38 @@ var Krait = (function (exports) {
         return Inputs;
     }();
 
+    var DefaultInputs = function () {
+        function DefaultInputs(ctrlKeys, asciiCodes) {
+            this.ctrlKeys = {
+                ctrl: false,
+                alt: false,
+                shift: false
+            };
+            this.setCtrlKeys(ctrlKeys);
+            this.asciiCodes = asciiCodes;
+        }
+        DefaultInputs.prototype.setCtrlKeys = function (ctrlKeys) {
+            for (var property in this.ctrlKeys) {
+                if (this.ctrlKeys.hasOwnProperty(property)) {
+                    this.ctrlKeys[property] = ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property] ? true : false;
+                }
+            }
+        };
+        return DefaultInputs;
+    }();
+
     var Command = function () {
-        function Command(name, ctrlKeys, keys, callback, scope) {
+        function Command(name, ctrlKeys, keys, callback, options) {
             this.name = name;
             this.started = false;
             var asciiCodes = Command.getAsciiCodes(keys);
             if (asciiCodes) {
-                this.inputs = new Inputs(ctrlKeys, asciiCodes);
-                this.defaultInputs = {
-                    ctrlKeys: ctrlKeys,
-                    asciiCodes: asciiCodes
-                };
+                this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
+                var preventDefault = options && options.hasOwnProperty('preventDefault') && options.preventDefault ? true : false;
+                this.inputs = new Inputs(this.defaultInputs.ctrlKeys, asciiCodes, preventDefault);
                 this.callback = callback;
-                if (scope) {
-                    this.callback = this.callback.bind(scope);
+                if (options && options.hasOwnProperty('scope')) {
+                    this.callback = this.callback.bind(options.scope);
                 }
             }
         }
@@ -143,10 +161,11 @@ var Krait = (function (exports) {
             }
             return false;
         };
-        Command.prototype.setInputs = function (ctrlKeys, newKeys) {
-            var asciiCodes = Command.getAsciiCodes(newKeys);
+        Command.prototype.setInputs = function (ctrlKeys, keys) {
+            var asciiCodes = Command.getAsciiCodes(keys);
             if (asciiCodes) {
-                this.inputs.set(ctrlKeys, asciiCodes);
+                this.inputs.setCtrlKeys(ctrlKeys);
+                this.inputs.setKeys(asciiCodes);
                 return true;
             }
             return false;
@@ -155,7 +174,8 @@ var Krait = (function (exports) {
             return this.inputs.getKeysAscii();
         };
         Command.prototype.default = function () {
-            this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
+            this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);
+            this.inputs.setKeys(this.defaultInputs.asciiCodes);
         };
         Command.getAsciiCodes = function (keys) {
             var asciiCodes = [];
@@ -188,10 +208,10 @@ var Krait = (function (exports) {
         function Group(name) {
             this.name = name;
             this.commands = [];
-            this.listen = false;
+            this.watch = false;
         }
         Group.prototype.down = function (a) {
-            if (this.listen) {
+            if (this.watch) {
                 for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
                     var command = _a[_i];
                     command.start(a);
@@ -199,22 +219,15 @@ var Krait = (function (exports) {
             }
         };
         Group.prototype.up = function (key) {
-            if (this.listen) {
+            if (this.watch) {
                 for (var _i = 0, _a = this.commands; _i < _a.length; _i++) {
                     var command = _a[_i];
                     command.stop(key);
                 }
             }
         };
-        Group.prototype.start = function () {
-            return this.listen = true;
-        };
-        Group.prototype.stop = function () {
-            this.listen = false;
-            return true;
-        };
-        Group.prototype.addCommand = function (name, controls, keys, callback, scope) {
-            var command = new Command(name, controls, keys, callback, scope);
+        Group.prototype.addCommand = function (name, ctrlKeys, keys, callback, options) {
+            var command = new Command(name, ctrlKeys, keys, callback, options);
             this.commands.push(command);
             this.commands = Group.sortCommands(this.commands);
             return command;
@@ -246,7 +259,7 @@ var Krait = (function (exports) {
             }
             return null;
         };
-        Group.prototype.getCommandInputsAscii = function (name) {
+        Group.prototype.getCommandInputs = function (name) {
             var command = this.getCommand(name);
             return command ? command.getInputsAscii() : false;
         };
@@ -285,13 +298,19 @@ var Krait = (function (exports) {
                 group.up(a.which);
             }
         };
-        Keyboard.prototype.start = function (groupName) {
+        Keyboard.prototype.watch = function (groupName) {
             var group = this.getGroup(groupName);
-            return group ? group.start() : false;
+            if (group) {
+                return group.watch = true;
+            }
+            return false;
         };
-        Keyboard.prototype.stop = function (groupName) {
+        Keyboard.prototype.ignore = function (groupName) {
             var group = this.getGroup(groupName);
-            return group ? group.stop() : false;
+            if (group) {
+                return group.watch = false;
+            }
+            return true;
         };
         Keyboard.prototype.addCommand = function (groupName, commandName, ctrlKeys, keys, callback, scope) {
             var group = this.getGroup(groupName);
@@ -301,9 +320,9 @@ var Krait = (function (exports) {
             }
             return group.addCommand(commandName, ctrlKeys, keys, callback, scope);
         };
-        Keyboard.prototype.setInputs = function (groupName, commandName, ctrlKeys, newKeys) {
+        Keyboard.prototype.setInputs = function (groupName, commandName, ctrlKeys, keys) {
             var group = this.getGroup(groupName);
-            return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
+            return group ? group.setInputs(commandName, ctrlKeys, keys) : false;
         };
         Keyboard.prototype.default = function (groupName, commandName) {
             var group = this.getGroup(groupName);

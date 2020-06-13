@@ -29,8 +29,10 @@ class Input {
     constructor() {
         this.pressed = false;
     }
-    down(a) {
-        a.preventDefault();
+    down(a, preventDefault) {
+        if (preventDefault) {
+            a.preventDefault();
+        }
         this.pressed = true;
     }
     up() {
@@ -39,19 +41,16 @@ class Input {
 }
 
 class Inputs {
-    constructor(ctrlKeys, asciiCodes) {
+    constructor(ctrlKeys, asciiCodes, preventDefault) {
         this.length = 0;
         this.keys = {};
-        this.ctrlKeys = {
-            ctrl: false,
-            alt: false,
-            shift: false
-        };
-        this.set(ctrlKeys, asciiCodes);
+        this.setCtrlKeys(ctrlKeys);
+        this.setKeys(asciiCodes);
+        this.preventDefault = preventDefault;
     }
     start(a) {
         if (this.keys.hasOwnProperty(a.which)) {
-            this.keys[a.which].down(a);
+            this.keys[a.which].down(a, this.preventDefault);
             if (this.length > 1) {
                 for (let property in this.keys) {
                     if (this.keys.hasOwnProperty(property)) {
@@ -76,16 +75,14 @@ class Inputs {
         }
         return false;
     }
-    set(ctrlKeys, asciiCodes) {
-        this.keys = {};
-        for (let property in this.ctrlKeys) {
-            if (this.ctrlKeys.hasOwnProperty(property)) {
-                this.ctrlKeys[property] =
-                    ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property]
-                        ? true
-                        : false;
-            }
-        }
+    setCtrlKeys(ctrlKeys) {
+        this.ctrlKeys = {
+            ctrl: ctrlKeys.ctrl,
+            alt: ctrlKeys.alt,
+            shift: ctrlKeys.shift
+        };
+    }
+    setKeys(asciiCodes) {
         for (let asciiCode of asciiCodes) {
             this.keys[asciiCode] = new Input();
         }
@@ -96,20 +93,40 @@ class Inputs {
     }
 }
 
+class DefaultInputs {
+    constructor(ctrlKeys, asciiCodes) {
+        this.ctrlKeys = {
+            ctrl: false,
+            alt: false,
+            shift: false
+        };
+        this.setCtrlKeys(ctrlKeys);
+        this.asciiCodes = asciiCodes;
+    }
+    setCtrlKeys(ctrlKeys) {
+        for (let property in this.ctrlKeys) {
+            if (this.ctrlKeys.hasOwnProperty(property)) {
+                this.ctrlKeys[property] =
+                    ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property] ? true : false;
+            }
+        }
+    }
+}
+
 class Command {
-    constructor(name, ctrlKeys, keys, callback, scope) {
+    constructor(name, ctrlKeys, keys, callback, options) {
         this.name = name;
         this.started = false;
         let asciiCodes = Command.getAsciiCodes(keys);
         if (asciiCodes) {
-            this.inputs = new Inputs(ctrlKeys, asciiCodes);
-            this.defaultInputs = {
-                ctrlKeys: ctrlKeys,
-                asciiCodes: asciiCodes
-            };
+            this.defaultInputs = new DefaultInputs(ctrlKeys, asciiCodes);
+            let preventDefault = (options &&
+                options.hasOwnProperty('preventDefault') &&
+                options.preventDefault) ? true : false;
+            this.inputs = new Inputs(this.defaultInputs.ctrlKeys, asciiCodes, preventDefault);
             this.callback = callback;
-            if (scope) {
-                this.callback = this.callback.bind(scope);
+            if (options && options.hasOwnProperty('scope')) {
+                this.callback = this.callback.bind(options.scope);
             }
         }
     }
@@ -129,10 +146,11 @@ class Command {
         }
         return false;
     }
-    setInputs(ctrlKeys, newKeys) {
-        let asciiCodes = Command.getAsciiCodes(newKeys);
+    setInputs(ctrlKeys, keys) {
+        let asciiCodes = Command.getAsciiCodes(keys);
         if (asciiCodes) {
-            this.inputs.set(ctrlKeys, asciiCodes);
+            this.inputs.setCtrlKeys(ctrlKeys);
+            this.inputs.setKeys(asciiCodes);
             return true;
         }
         return false;
@@ -141,7 +159,8 @@ class Command {
         return this.inputs.getKeysAscii();
     }
     default() {
-        this.inputs.set(this.defaultInputs.ctrlKeys, this.defaultInputs.asciiCodes);
+        this.inputs.setCtrlKeys(this.defaultInputs.ctrlKeys);
+        this.inputs.setKeys(this.defaultInputs.asciiCodes);
     }
     static getAsciiCodes(keys) {
         let asciiCodes = [];
@@ -172,31 +191,24 @@ class Group {
     constructor(name) {
         this.name = name;
         this.commands = [];
-        this.listen = false;
+        this.watch = false;
     }
     down(a) {
-        if (this.listen) {
+        if (this.watch) {
             for (let command of this.commands) {
                 command.start(a);
             }
         }
     }
     up(key) {
-        if (this.listen) {
+        if (this.watch) {
             for (let command of this.commands) {
                 command.stop(key);
             }
         }
     }
-    start() {
-        return (this.listen = true);
-    }
-    stop() {
-        this.listen = false;
-        return true;
-    }
-    addCommand(name, controls, keys, callback, scope) {
-        let command = new Command(name, controls, keys, callback, scope);
+    addCommand(name, ctrlKeys, keys, callback, options) {
+        let command = new Command(name, ctrlKeys, keys, callback, options);
         this.commands.push(command);
         this.commands = Group.sortCommands(this.commands);
         return command;
@@ -227,7 +239,7 @@ class Group {
         }
         return null;
     }
-    getCommandInputsAscii(name) {
+    getCommandInputs(name) {
         let command = this.getCommand(name);
         return command ? command.getInputsAscii() : false;
     }
@@ -262,13 +274,19 @@ class Keyboard {
             group.up(a.which);
         }
     }
-    start(groupName) {
+    watch(groupName) {
         let group = this.getGroup(groupName);
-        return group ? group.start() : false;
+        if (group) {
+            return group.watch = true;
+        }
+        return false;
     }
-    stop(groupName) {
+    ignore(groupName) {
         let group = this.getGroup(groupName);
-        return group ? group.stop() : false;
+        if (group) {
+            return group.watch = false;
+        }
+        return true;
     }
     addCommand(groupName, commandName, ctrlKeys, keys, callback, scope) {
         let group = this.getGroup(groupName);
@@ -278,9 +296,9 @@ class Keyboard {
         }
         return group.addCommand(commandName, ctrlKeys, keys, callback, scope);
     }
-    setInputs(groupName, commandName, ctrlKeys, newKeys) {
+    setInputs(groupName, commandName, ctrlKeys, keys) {
         let group = this.getGroup(groupName);
-        return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
+        return group ? group.setInputs(commandName, ctrlKeys, keys) : false;
     }
     default(groupName, commandName) {
         let group = this.getGroup(groupName);

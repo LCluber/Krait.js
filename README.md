@@ -1,6 +1,6 @@
 ## Synopsis
 
-[Krait.js](http://kraitjs.lcluber.com) is a key bindings library written in TypeScript with multiple keystroke detection.
+Krait.js is a key bindings library written in TypeScript with multiple keystroke detection.
 
 ## Motivation
 
@@ -20,10 +20,6 @@ $ npm install @lcluber/kraitjs
 $ yarn add @lcluber/kraitjs
 ```
 
-## Demo
-
-See a basic example **[here](http://kraitjs.lcluber.com/#example)**.
-
 ## Usage
 
 ### ES6
@@ -33,22 +29,10 @@ import { Keyboard } from "@lcluber/kraitjs";
 
 let keyboard = new Keyboard();
 
-keyboard.addCommand(
-  "group1",
-  "action0",
-  { ctrl: true, alt: false, shift: false },
-  [65],
-  action0,
-  null
-);
-keyboard.addCommand(
-  "group1",
-  "action1",
-  { ctrl: false, alt: false, shift: false },
-  ["G"],
-  action1,
-  null
-);
+keyboard.addCommand("group1", "action0", null, [32], action0, {
+  preventDefault: true
+});
+keyboard.addCommand("group1", "action1", { ctrl: true }, ["G"], action1, null);
 // set another key for action1
 keyboard.setInputs(
   "group1",
@@ -58,7 +42,7 @@ keyboard.setInputs(
 );
 
 // Enable group1 commands
-keyboard.start("group1");
+keyboard.startListening("group1");
 
 function action0(isKeyDown) {
   if (isKeyDown) {
@@ -78,22 +62,10 @@ function action1(isKeyDown) {
 ```javascript
 var keyboard = new Krait.Keyboard();
 
-keyboard.addCommand(
-  "group1",
-  "action0",
-  { ctrl: true, alt: false, shift: false },
-  [65],
-  action0,
-  null
-);
-keyboard.addCommand(
-  "group1",
-  "action1",
-  { ctrl: false, alt: false, shift: false },
-  ["G"],
-  action1,
-  null
-);
+keyboard.addCommand("group1", "action0", null, [32], action0, {
+  preventDefault: true
+});
+keyboard.addCommand("group1", "action1", { ctrl: true }, ["G"], action1, null);
 // set another key for action1
 keyboard.setInputs(
   "group1",
@@ -127,32 +99,33 @@ interface CtrlKeys {
   shift?: boolean;
 }
 
+export interface Options {
+  preventDefault?: boolean;
+  scope?: this;
+}
+
 addCommand(
     name: string,
-    controls: CtrlKeys,
+    ctrlKeys: CtrlKeys | null,
     keys: Array<string | number>,
     callback: Function,
-    scope: any
+    options: Options | null
   ): Command {}
 
 setInputs(
     ctrlKeys: CtrlKeys,
-    newKeys: Array<string | number>
+    keys: Array<string | number>
   ): boolean {}
 
-start(a: KeyboardEvent): boolean {}
+watch(groupName: string): boolean {}
 
-stop(key: number): boolean {}
+ignore(groupName: string): boolean {}
 
-default(): void {}
-
-down(a: KeyboardEvent): void {}
-
-up(key: number): void {}
+default(groupName: string, commandName: string): boolean {}
 
 getCommand(name: string): Command | null {}
 
-getCommandInputsAscii(name: string): Array<string> | false {}
+getCommandInputs(name: string): string[] | false {}
 
 ```
 

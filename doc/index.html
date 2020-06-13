@@ -69,19 +69,137 @@
 				<h2 id="motivation">Motivation</h2>
 				<p>The purpose of this library is to provide a simple and easy to use key binding declaration.</p>
 				<h2 id="installation">Installation</h2>
+				<h3 id="npm">npm</h3>
 				<pre><code class="language-bash">$ npm install @lcluber/kraitjs</code></pre>
-				<p>Or download it <strong><a href="http://kraitjs.lcluber.com/#download">here</a></strong>.</p>
+				<h3 id="yarn">Yarn</h3>
+				<pre><code class="language-bash">$ yarn add @lcluber/kraitjs</code></pre>
 				<h2 id="demo">Demo</h2>
 				<p>See a basic example <strong><a href="http://kraitjs.lcluber.com/#example">here</a></strong>.</p>
 				<h2 id="usage">Usage</h2>
-				<p>Learn how to use it <strong><a href="http://kraitjs.lcluber.com/#source">here</a></strong>.</p>
+				<h3 id="es6">ES6</h3>
+				<pre><code class="language-javascript"><span class="hljs-keyword">import</span> { Keyboard } <span class="hljs-keyword">from</span> <span class="hljs-string">"@lcluber/kraitjs"</span>;
+
+<span class="hljs-keyword">let</span> keyboard = <span class="hljs-keyword">new</span> Keyboard();
+
+keyboard.addCommand(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action0"</span>,
+  <span class="hljs-literal">null</span>,
+  [<span class="hljs-number">32</span>],
+  action0,
+  {<span class="hljs-attr">preventDefault</span>:<span class="hljs-literal">true</span>}
+);
+keyboard.addCommand(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action1"</span>,
+  { <span class="hljs-attr">ctrl</span>: <span class="hljs-literal">true</span> },
+  [<span class="hljs-string">"G"</span>],
+  action1,
+  <span class="hljs-literal">null</span>
+);
+<span class="hljs-comment">// set another key for action1</span>
+keyboard.setInputs(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action1"</span>,
+  { <span class="hljs-attr">ctrl</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">alt</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">shift</span>: <span class="hljs-literal">false</span> },
+  [<span class="hljs-string">"Z"</span>]
+);
+
+<span class="hljs-comment">// Enable group1 commands</span>
+keyboard.startListening(<span class="hljs-string">"group1"</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action0</span>(<span class="hljs-params">isKeyDown</span>) </span>{
+  <span class="hljs-keyword">if</span> (isKeyDown) {
+    <span class="hljs-comment">// do something;</span>
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action1</span>(<span class="hljs-params">isKeyDown</span>) </span>{
+  <span class="hljs-keyword">if</span> (isKeyDown) {
+    <span class="hljs-comment">// do something;</span>
+  }
+}</code></pre>
+				<h3 id="iife">IIFE</h3>
+				<pre><code class="language-javascript"><span class="hljs-keyword">var</span> keyboard = <span class="hljs-keyword">new</span> Krait.Keyboard();
+
+keyboard.addCommand(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action0"</span>,
+  <span class="hljs-literal">null</span>,
+  [<span class="hljs-number">32</span>],
+  action0,
+  {<span class="hljs-attr">preventDefault</span>:<span class="hljs-literal">true</span>}
+);
+keyboard.addCommand(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action1"</span>,
+  { <span class="hljs-attr">ctrl</span>: <span class="hljs-literal">true</span> },
+  [<span class="hljs-string">"G"</span>],
+  action1,
+  <span class="hljs-literal">null</span>
+);
+<span class="hljs-comment">// set another key for action1</span>
+keyboard.setInputs(
+  <span class="hljs-string">"group1"</span>,
+  <span class="hljs-string">"action1"</span>,
+  { <span class="hljs-attr">ctrl</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">alt</span>: <span class="hljs-literal">false</span>, <span class="hljs-attr">shift</span>: <span class="hljs-literal">false</span> },
+  [<span class="hljs-string">"Z"</span>]
+);
+
+<span class="hljs-comment">// Enable group1 commands</span>
+keyboard.start(<span class="hljs-string">"group1"</span>);
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action0</span>(<span class="hljs-params">isKeyDown</span>) </span>{
+  <span class="hljs-keyword">if</span> (isKeyDown) {
+    <span class="hljs-comment">// do something;</span>
+  }
+}
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">action1</span>(<span class="hljs-params">isKeyDown</span>) </span>{
+  <span class="hljs-keyword">if</span> (isKeyDown) {
+    <span class="hljs-comment">// do something;</span>
+  }
+}</code></pre>
 				<h2 id="api-reference">API Reference</h2>
-				<p>Read the documentation <strong><a href="http://kraitjs.lcluber.com/doc/">here</a></strong>.</p>
+				<pre><code class="language-javascript">interface CtrlKeys {
+  ctrl?: boolean;
+  alt?: boolean;
+  shift?: boolean;
+}
+
+<span class="hljs-keyword">export</span> interface Options {
+  preventDefault?: boolean;
+  scope?: <span class="hljs-keyword">this</span>;
+}
+
+addCommand(
+    name: string,
+    <span class="hljs-attr">controls</span>: CtrlKeys | <span class="hljs-literal">null</span>,
+    <span class="hljs-attr">keys</span>: <span class="hljs-built_in">Array</span>&lt;string | number&gt;,
+    <span class="hljs-attr">callback</span>: <span class="hljs-built_in">Function</span>,
+    <span class="hljs-attr">options</span>: Options
+  ): Command {}
+
+setInputs(
+    ctrlKeys: CtrlKeys,
+    <span class="hljs-attr">newKeys</span>: <span class="hljs-built_in">Array</span>&lt;string | number&gt;
+  ): boolean {}
+
+watch(groupName: string): boolean {}
+
+ignore(groupName: string): boolean {}
+
+<span class="hljs-keyword">default</span>(groupName: string, <span class="hljs-attr">commandName</span>: string): boolean {}
+
+getCommand(name: string): Command | <span class="hljs-literal">null</span> {}
+
+getCommandInputs(name: string): string[] | <span class="hljs-literal">false</span> {}
+</code></pre>
 				<h2 id="tests">Tests</h2>
 				<p>No tests to run yet</p>
 				<h2 id="contributors">Contributors</h2>
 				<p>There is still a lot of work to do on this project and I would be glad to get all the help you can provide.
-				To contribute you can clone the project on <strong><a href="https://github.com/LCluber/Krait.js">GitHub</a></strong> and see  <strong>NOTICE.md</strong> for detailed installation walkthrough of the project.</p>
+				To contribute you can clone the project on <strong><a href="https://github.com/LCluber/Krait.js">GitHub</a></strong> and see <strong>NOTICE.md</strong> for detailed installation walkthrough of the project.</p>
 				<h2 id="license">License</h2>
 				<p>MIT License</p>
 				<p>Copyright (c) 2015 Ludovic CLUBER</p>
@@ -110,6 +228,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_command_.html">"command"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="modules/_defaultinputs_.html">"default<wbr>Inputs"</a>
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="modules/_group_.html">"group"</a>

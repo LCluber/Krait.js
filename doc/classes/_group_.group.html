@@ -91,8 +91,8 @@
 							<h3>Properties</h3>
 							<ul class="tsd-index-list">
 								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_group_.group.html#commands" class="tsd-kind-icon">commands</a></li>
-								<li class="tsd-kind-property tsd-parent-kind-class tsd-is-private"><a href="_group_.group.html#listen" class="tsd-kind-icon">listen</a></li>
 								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_group_.group.html#name" class="tsd-kind-icon">name</a></li>
+								<li class="tsd-kind-property tsd-parent-kind-class"><a href="_group_.group.html#watch" class="tsd-kind-icon">watch</a></li>
 							</ul>
 						</section>
 						<section class="tsd-index-section ">
@@ -102,10 +102,8 @@
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#default" class="tsd-kind-icon">default</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#down" class="tsd-kind-icon">down</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#getcommand" class="tsd-kind-icon">get<wbr>Command</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#getcommandinputsascii" class="tsd-kind-icon">get<wbr>Command<wbr>Inputs<wbr>Ascii</a></li>
+								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#getcommandinputs" class="tsd-kind-icon">get<wbr>Command<wbr>Inputs</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#setinputs" class="tsd-kind-icon">set<wbr>Inputs</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#start" class="tsd-kind-icon">start</a></li>
-								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#stop" class="tsd-kind-icon">stop</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class"><a href="_group_.group.html#up" class="tsd-kind-icon">up</a></li>
 								<li class="tsd-kind-method tsd-parent-kind-class tsd-is-private tsd-is-static"><a href="_group_.group.html#sortcommands" class="tsd-kind-icon">sort<wbr>Commands</a></li>
 							</ul>
@@ -125,7 +123,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L8">group.ts:8</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L8">group.ts:8</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -147,17 +145,7 @@
 					<div class="tsd-signature tsd-kind-icon">commands<span class="tsd-signature-symbol">:</span> <a href="_command_.command.html" class="tsd-signature-type">Command</a><span class="tsd-signature-symbol">[]</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L7">group.ts:7</a></li>
-						</ul>
-					</aside>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class tsd-is-private">
-					<a name="listen" class="tsd-anchor"></a>
-					<h3><span class="tsd-flag ts-flagPrivate">Private</span> listen</h3>
-					<div class="tsd-signature tsd-kind-icon">listen<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
-					<aside class="tsd-sources">
-						<ul>
-							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L8">group.ts:8</a></li>
+							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L8">group.ts:8</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -167,7 +155,17 @@
 					<div class="tsd-signature tsd-kind-icon">name<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
 					<aside class="tsd-sources">
 						<ul>
-							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L6">group.ts:6</a></li>
+							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L6">group.ts:6</a></li>
+						</ul>
+					</aside>
+				</section>
+				<section class="tsd-panel tsd-member tsd-kind-property tsd-parent-kind-class">
+					<a name="watch" class="tsd-anchor"></a>
+					<h3>watch</h3>
+					<div class="tsd-signature tsd-kind-icon">watch<span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">boolean</span></div>
+					<aside class="tsd-sources">
+						<ul>
+							<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L7">group.ts:7</a></li>
 						</ul>
 					</aside>
 				</section>
@@ -178,13 +176,13 @@
 					<a name="addcommand" class="tsd-anchor"></a>
 					<h3>add<wbr>Command</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">add<wbr>Command<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, controls<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_.ctrlkeys.html" class="tsd-signature-type">CtrlKeys</a>, keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, scope<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">any</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_command_.command.html" class="tsd-signature-type">Command</a></li>
+						<li class="tsd-signature tsd-kind-icon">add<wbr>Command<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span>, controls<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_.ctrlkeys.html" class="tsd-signature-type">CtrlKeys</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span>, keys<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span>, callback<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Function</span>, options<span class="tsd-signature-symbol">: </span><a href="../interfaces/_interfaces_.options.html" class="tsd-signature-type">Options</a><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><a href="_command_.command.html" class="tsd-signature-type">Command</a></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L41">group.ts:41</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L32">group.ts:32</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -193,7 +191,7 @@
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
 								</li>
 								<li>
-									<h5>controls: <a href="../interfaces/_interfaces_.ctrlkeys.html" class="tsd-signature-type">CtrlKeys</a></h5>
+									<h5>controls: <a href="../interfaces/_interfaces_.ctrlkeys.html" class="tsd-signature-type">CtrlKeys</a><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">null</span></h5>
 								</li>
 								<li>
 									<h5>keys: <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">&gt;</span></h5>
@@ -202,7 +200,7 @@
 									<h5>callback: <span class="tsd-signature-type">Function</span></h5>
 								</li>
 								<li>
-									<h5>scope: <span class="tsd-signature-type">any</span></h5>
+									<h5>options: <a href="../interfaces/_interfaces_.options.html" class="tsd-signature-type">Options</a></h5>
 								</li>
 							</ul>
 							<h4 class="tsd-returns-title">Returns <a href="_command_.command.html" class="tsd-signature-type">Command</a></h4>
@@ -219,7 +217,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L68">group.ts:68</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L59">group.ts:59</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -242,7 +240,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L16">group.ts:16</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L16">group.ts:16</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -265,7 +263,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L78">group.ts:78</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L69">group.ts:69</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -282,16 +280,16 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="getcommandinputsascii" class="tsd-anchor"></a>
-					<h3>get<wbr>Command<wbr>Inputs<wbr>Ascii</h3>
+					<a name="getcommandinputs" class="tsd-anchor"></a>
+					<h3>get<wbr>Command<wbr>Inputs</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">get<wbr>Command<wbr>Inputs<wbr>Ascii<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></li>
+						<li class="tsd-signature tsd-kind-icon">get<wbr>Command<wbr>Inputs<span class="tsd-signature-symbol">(</span>name<span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span><span class="tsd-signature-symbol"> | </span><span class="tsd-signature-type">false</span></li>
 					</ul>
 					<ul class="tsd-descriptions">
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L87">group.ts:87</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L78">group.ts:78</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -300,7 +298,7 @@
 									<h5>name: <span class="tsd-signature-type">string</span></h5>
 								</li>
 							</ul>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">Array</span><span class="tsd-signature-symbol">&lt;</span><span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">&gt;</span>
+							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span>
 								<span class="tsd-signature-symbol"> | </span>
 								<span class="tsd-signature-type">false</span>
 							</h4>
@@ -317,7 +315,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L54">group.ts:54</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L45">group.ts:45</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -337,40 +335,6 @@
 					</ul>
 				</section>
 				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="start" class="tsd-anchor"></a>
-					<h3>start</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">start<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L32">group.ts:32</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
-					<a name="stop" class="tsd-anchor"></a>
-					<h3>stop</h3>
-					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
-						<li class="tsd-signature tsd-kind-icon">stop<span class="tsd-signature-symbol">(</span><span class="tsd-signature-symbol">)</span><span class="tsd-signature-symbol">: </span><span class="tsd-signature-type">true</span></li>
-					</ul>
-					<ul class="tsd-descriptions">
-						<li class="tsd-description">
-							<aside class="tsd-sources">
-								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L36">group.ts:36</a></li>
-								</ul>
-							</aside>
-							<h4 class="tsd-returns-title">Returns <span class="tsd-signature-type">true</span></h4>
-						</li>
-					</ul>
-				</section>
-				<section class="tsd-panel tsd-member tsd-kind-method tsd-parent-kind-class">
 					<a name="up" class="tsd-anchor"></a>
 					<h3>up</h3>
 					<ul class="tsd-signatures tsd-kind-method tsd-parent-kind-class">
@@ -380,7 +344,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L24">group.ts:24</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L24">group.ts:24</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -403,7 +367,7 @@
 						<li class="tsd-description">
 							<aside class="tsd-sources">
 								<ul>
-									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/1432327/src/ts/group.ts#L92">group.ts:92</a></li>
+									<li>Defined in <a href="https://github.com/LCluber/Krait.js/blob/7047626/src/ts/group.ts#L83">group.ts:83</a></li>
 								</ul>
 							</aside>
 							<h4 class="tsd-parameters-title">Parameters</h4>
@@ -426,6 +390,9 @@
 					</li>
 					<li class=" tsd-kind-external-module">
 						<a href="../modules/_command_.html">"command"</a>
+					</li>
+					<li class=" tsd-kind-external-module">
+						<a href="../modules/_defaultinputs_.html">"default<wbr>Inputs"</a>
 					</li>
 					<li class="current tsd-kind-external-module">
 						<a href="../modules/_group_.html">"group"</a>
@@ -457,11 +424,11 @@
 							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
 								<a href="_group_.group.html#commands" class="tsd-kind-icon">commands</a>
 							</li>
-							<li class=" tsd-kind-property tsd-parent-kind-class tsd-is-private">
-								<a href="_group_.group.html#listen" class="tsd-kind-icon">listen</a>
-							</li>
 							<li class=" tsd-kind-property tsd-parent-kind-class">
 								<a href="_group_.group.html#name" class="tsd-kind-icon">name</a>
+							</li>
+							<li class=" tsd-kind-property tsd-parent-kind-class">
+								<a href="_group_.group.html#watch" class="tsd-kind-icon">watch</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_group_.group.html#addcommand" class="tsd-kind-icon">add<wbr>Command</a>
@@ -476,16 +443,10 @@
 								<a href="_group_.group.html#getcommand" class="tsd-kind-icon">get<wbr>Command</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_group_.group.html#getcommandinputsascii" class="tsd-kind-icon">get<wbr>Command<wbr>Inputs<wbr>Ascii</a>
+								<a href="_group_.group.html#getcommandinputs" class="tsd-kind-icon">get<wbr>Command<wbr>Inputs</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_group_.group.html#setinputs" class="tsd-kind-icon">set<wbr>Inputs</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_group_.group.html#start" class="tsd-kind-icon">start</a>
-							</li>
-							<li class=" tsd-kind-method tsd-parent-kind-class">
-								<a href="_group_.group.html#stop" class="tsd-kind-icon">stop</a>
 							</li>
 							<li class=" tsd-kind-method tsd-parent-kind-class">
 								<a href="_group_.group.html#up" class="tsd-kind-icon">up</a>

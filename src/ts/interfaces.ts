@@ -7,9 +7,10 @@ export interface CtrlKeys {
   [key: string]: boolean | undefined;
 }
 
-export interface DefaultInputs {
-  ctrlKeys: CtrlKeys;
-  asciiCodes: number[];
+export interface Options {
+  preventDefault?: boolean;
+  scope?: this;
+  [key: string]: boolean | this | undefined;
 }
 
 export interface Keys {

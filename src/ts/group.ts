@@ -1,20 +1,20 @@
 import { Command } from "./command";
-import { CtrlKeys } from "./interfaces";
+import { CtrlKeys, Options } from "./interfaces";
 
 export class Group {
   // map: Object;
   public name: string;
+  public watch: boolean;
   private commands: Command[];
-  private listen: boolean;
 
   constructor(name: string) {
     this.name = name;
     this.commands = [];
-    this.listen = false;
+    this.watch = false;
   }
 
   public down(a: KeyboardEvent): void {
-    if (this.listen) {
+    if (this.watch) {
       for (let command of this.commands) {
         command.start(a);
       }
@@ -22,30 +22,21 @@ export class Group {
   }
 
   public up(key: number): void {
-    if (this.listen) {
+    if (this.watch) {
       for (let command of this.commands) {
         command.stop(key);
       }
     }
   }
 
-  public start(): true {
-    return (this.listen = true);
-  }
-
-  public stop(): true {
-    this.listen = false;
-    return true;
-  }
-
   public addCommand(
     name: string,
-    controls: CtrlKeys,
+    ctrlKeys: CtrlKeys | null,
     keys: Array<string | number>,
     callback: Function,
-    scope: any
+    options: Options | null
   ): Command {
-    let command = new Command(name, controls, keys, callback, scope);
+    let command = new Command(name, ctrlKeys, keys, callback, options);
     this.commands.push(command);
     this.commands = Group.sortCommands(this.commands);
     return command;
@@ -84,7 +75,7 @@ export class Group {
     return null;
   }
 
-  public getCommandInputsAscii(name: string): Array<string> | false {
+  public getCommandInputs(name: string): string[] | false {
     let command = this.getCommand(name);
     return command ? command.getInputsAscii() : false;
   }

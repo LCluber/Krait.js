@@ -439,11 +439,6 @@ module.exports = function(grunt) {
     //'replace:declaration'
   ]);
 
-  grunt.registerTask("doc", "Compile lib documentation", [
-    "clean:doc",
-    "typedoc"
-  ]);
-
   grunt.registerTask(
     "serve",
     "launch server, open website and watch for changes",
@@ -484,8 +479,6 @@ module.exports = function(grunt) {
     grunt.task.run("lib");
     //build site
     grunt.task.run("website");
-    //build documentation
-    grunt.task.run("doc");
     // launch server and watch for changes
     grunt.task.run("serve");
   });

@@ -1,24 +1,13 @@
-// import { Logger, Group as LoggerGroup } from "@lcluber/mouettejs";
 import { Group } from "./group";
 import { Command } from "./command";
 import { CtrlKeys } from "./interfaces";
 
-// declare global {
-//   interface Window { Mouette: Logger; }
-// }
-
 export class Keyboard {
-  // map: Object;
   private groups: Group[];
-  // private log: LoggerGroup;
-  // private listen: boolean;
 
   constructor() {
     this.initListeners();
     this.groups = [];
-    // window.Mouette = Logger;
-    // this.log = window.Mouette.addGroup("Krait");
-    // this.log = Logger.addGroup("Krait");
   }
 
   private initListeners(): void {
@@ -43,14 +32,20 @@ export class Keyboard {
     }
   }
 
-  public start(groupName: string): boolean {
+  public watch(groupName: string): boolean {
     let group = this.getGroup(groupName);
-    return group ? group.start() : false;
+    if (group) {
+      return (group.watch = true);
+    }
+    return false;
   }
 
-  public stop(groupName: string): boolean {
+  public ignore(groupName: string): boolean {
     let group = this.getGroup(groupName);
-    return group ? group.stop() : false;
+    if (group) {
+      return (group.watch = false);
+    }
+    return true;
   }
 
   public addCommand(
@@ -73,10 +68,10 @@ export class Keyboard {
     groupName: string,
     commandName: string,
     ctrlKeys: CtrlKeys,
-    newKeys: Array<string | number>
+    keys: Array<string | number>
   ): boolean {
     let group = this.getGroup(groupName);
-    return group ? group.setInputs(commandName, ctrlKeys, newKeys) : false;
+    return group ? group.setInputs(commandName, ctrlKeys, keys) : false;
   }
 
   public default(groupName: string, commandName: string): boolean {

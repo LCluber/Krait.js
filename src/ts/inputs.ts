@@ -6,21 +6,23 @@ export class Inputs {
   public length: number;
   private keys: Keys;
   private ctrlKeys: CtrlKeys;
+  private preventDefault: boolean;
 
-  constructor(ctrlKeys: CtrlKeys, asciiCodes: number[]) {
+  constructor(
+    ctrlKeys: CtrlKeys,
+    asciiCodes: number[],
+    preventDefault: boolean
+  ) {
     this.length = 0;
     this.keys = {};
-    this.ctrlKeys = {
-      ctrl: false,
-      alt: false,
-      shift: false
-    };
-    this.set(ctrlKeys, asciiCodes);
+    this.setCtrlKeys(ctrlKeys);
+    this.setKeys(asciiCodes);
+    this.preventDefault = preventDefault;
   }
 
   public start(a: KeyboardEvent): boolean {
     if (this.keys.hasOwnProperty(a.which)) {
-      this.keys[a.which].down(a);
+      this.keys[a.which].down(a, this.preventDefault);
       // check if every input is pressed
       if (this.length > 1) {
         for (let property in this.keys) {
@@ -51,23 +53,22 @@ export class Inputs {
     return false;
   }
 
-  public set(ctrlKeys: CtrlKeys, asciiCodes: number[]): void {
-    this.keys = {};
-    for (let property in this.ctrlKeys) {
-      if (this.ctrlKeys.hasOwnProperty(property)) {
-        this.ctrlKeys[property] =
-          ctrlKeys && ctrlKeys.hasOwnProperty(property) && ctrlKeys[property]
-            ? true
-            : false;
-      }
-    }
+  public setCtrlKeys(ctrlKeys: CtrlKeys): void {
+    this.ctrlKeys = {
+      ctrl: ctrlKeys.ctrl,
+      alt: ctrlKeys.alt,
+      shift: ctrlKeys.shift
+    };
+  }
+
+  public setKeys(asciiCodes: number[]): void {
     for (let asciiCode of asciiCodes) {
       this.keys[asciiCode] = new Input();
     }
     this.length = asciiCodes.length;
   }
 
-  public getKeysAscii() {
+  public getKeysAscii(): string[] {
     return Object.keys(this.keys);
   }
 }

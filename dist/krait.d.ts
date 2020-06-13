@@ -24,16 +24,17 @@
 */
 
 
+
 export declare class Command {
     name: string;
     private callback;
     inputs: Inputs;
     defaultInputs: DefaultInputs;
     private started;
-    constructor(name: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any);
+    constructor(name: string, ctrlKeys: CtrlKeys | null, keys: Array<string | number>, callback: Function, options: Options | null);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
-    setInputs(ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
+    setInputs(ctrlKeys: CtrlKeys, keys: Array<string | number>): boolean;
     getInputsAscii(): string[];
     default(): void;
     private static getAsciiCodes;
@@ -41,27 +42,32 @@ export declare class Command {
     private static toASCII;
 }
 
+export declare class DefaultInputs {
+    asciiCodes: number[];
+    ctrlKeys: CtrlKeys;
+    constructor(ctrlKeys: CtrlKeys | null, asciiCodes: number[]);
+    private setCtrlKeys;
+}
+
 
 export declare class Group {
     name: string;
+    watch: boolean;
     private commands;
-    private listen;
     constructor(name: string);
     down(a: KeyboardEvent): void;
     up(key: number): void;
-    start(): true;
-    stop(): true;
-    addCommand(name: string, controls: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
+    addCommand(name: string, ctrlKeys: CtrlKeys | null, keys: Array<string | number>, callback: Function, options: Options | null): Command;
     setInputs(name: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
     default(name: string): boolean;
     getCommand(name: string): Command | null;
-    getCommandInputsAscii(name: string): Array<string> | false;
+    getCommandInputs(name: string): string[] | false;
     private static sortCommands;
 }
 export declare class Input {
     pressed: boolean;
     constructor();
-    down(a: KeyboardEvent): void;
+    down(a: KeyboardEvent, preventDefault: boolean): void;
     up(): void;
 }
 
@@ -69,10 +75,12 @@ export declare class Inputs {
     length: number;
     private keys;
     private ctrlKeys;
-    constructor(ctrlKeys: CtrlKeys, asciiCodes: number[]);
+    private preventDefault;
+    constructor(ctrlKeys: CtrlKeys, asciiCodes: number[], preventDefault: boolean);
     start(a: KeyboardEvent): boolean;
     stop(key: number): boolean;
-    set(ctrlKeys: CtrlKeys, asciiCodes: number[]): void;
+    setCtrlKeys(ctrlKeys: CtrlKeys): void;
+    setKeys(asciiCodes: number[]): void;
     getKeysAscii(): string[];
 }
 
@@ -82,9 +90,10 @@ export interface CtrlKeys {
     shift?: boolean;
     [key: string]: boolean | undefined;
 }
-export interface DefaultInputs {
-    ctrlKeys: CtrlKeys;
-    asciiCodes: number[];
+export interface Options {
+    preventDefault?: boolean;
+    scope?: this;
+    [key: string]: boolean | this | undefined;
 }
 export interface Keys {
     [key: number]: Input;
@@ -98,10 +107,10 @@ export declare class Keyboard {
     private initListeners;
     down(a: KeyboardEvent): void;
     up(a: KeyboardEvent): void;
-    start(groupName: string): boolean;
-    stop(groupName: string): boolean;
+    watch(groupName: string): boolean;
+    ignore(groupName: string): boolean;
     addCommand(groupName: string, commandName: string, ctrlKeys: CtrlKeys, keys: Array<string | number>, callback: Function, scope: any): Command;
-    setInputs(groupName: string, commandName: string, ctrlKeys: CtrlKeys, newKeys: Array<string | number>): boolean;
+    setInputs(groupName: string, commandName: string, ctrlKeys: CtrlKeys, keys: Array<string | number>): boolean;
     default(groupName: string, commandName: string): boolean;
     getGroup(name: string): Group | null;
     getCommand(groupName: string, commandName: string): Command | null;
