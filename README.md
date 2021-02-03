@@ -1,3 +1,9 @@
+### This project has been transferred to [DWTechs](https://github.com/DWTechs/CtrlTab.js) and is now called [CtrlTab.js](https://github.com/DWTechs/CtrlTab.js).
+
+### Please update your project dependencies to [CtrlTab.js](https://github.com/DWTechs/CtrlTab.js) as Krait.js will not be updated anymore.
+
+---
+
 ## Synopsis
 
 Krait.js is a key bindings library written in TypeScript with multiple keystroke detection.

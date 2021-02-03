@@ -1,3 +1,8 @@
+## 2.3.0 (February 04th 2021)
+
+- Krait.js becomes CtrlTab.js
+- Project transferred from LCluber to DWTechs account. See README.md for more info.
+
 ## Version 2.2.0 (June 13th 2020)
 
 - New preventDefault option so you can decide if an input should trigger its default behavior when hit or not.
