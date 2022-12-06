@@ -42,7 +42,7 @@
     "@lcluber/chjs": "2.10.0",
     "body-parser": "1.16.1",
     "cookie-parser": "1.4.3",
-    "express": "4.14.1",
+    "express": "4.17.3",
     "i18next": "4.0.0",
     "i18next-express-middleware": "1.0.2",
     "i18next-node-fs-backend": "0.1.3",
